@@ -1,0 +1,13 @@
+{
+  "name": "Dumpster",
+  "version": "1.0.0",
+  "description": "Self-hosted and API-based file upload server.",
+  "license": "MIT",
+  "repository": "http://github.com/nmaggioni/Dumpster",
+  "dependencies": {
+    "express": "~4.10.2",
+    "multer": "~0.1.6",
+    "winston": "~2.1.1",
+    "body-parser": "~1.14.1"
+  }
+}
