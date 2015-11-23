@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var express = require("express");
 var app = express();
 var path = require('path');
-var yubikey = require('./yubikey.js'); // https://github.com/evilpacket/node-yubikey
+var yubikey = require('./lib/yubikey.js'); // https://github.com/evilpacket/node-yubikey
 yubikey.apiId = 0; // <-- Fill in
 yubikey.apiKey = ''; // <-- Fill in
 
