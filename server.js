@@ -4,12 +4,14 @@ var bodyParser = require('body-parser');
 var express = require("express");
 var app = express();
 var path = require('path');
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('lib/config.js'));
 var yubikey = require('./lib/yubikey.js'); // https://github.com/evilpacket/node-yubikey
-yubikey.apiId = 0; // <-- Fill in
-yubikey.apiKey = ''; // <-- Fill in
+yubikey.apiId = config.apiId;
+yubikey.apiKey = config.apiKey;
 
-var uploadPath = 'uploads/';
-var domainUrl = 'http://your.domain.name/' + uploadPath; // <-- Fill in
+var uploadPath = config.uploadFolder;
+var domainUrl = config.domainName + uploadPath;
 
 function logWrapper(message) {
 	var timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -22,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var authUpload = function (req, res, next) {
   var user = req.query.user;
   var token = req.query.token;
-  if (user == "yourUser") { // <-- Fill in
+  if (user == config.username) {
     yubikey.verify(token, function(isValid) {
       if (isValid) {
         logWrapper("Valid token: " + token);
@@ -47,8 +49,8 @@ var upload = multer({
   limits: {
     files: 1, // Max 1 file per upload
     fields: 0, // No extra POST fields
-    fieldSize: 52428800, // 50MB
-    fileSize: 52428800 // 50MB
+    fieldSize: config.maxFileSize,
+    fileSize: config.maxFileSize
   },
   onFileUploadStart: function(file) {
 	  logWrapper("Accepting upload: " + file.originalname + " (" + file.size + " bytes, "+ file.mimetype + ")");
