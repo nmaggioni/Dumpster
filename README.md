@@ -1,8 +1,5 @@
-# Dumpster
+# Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster)
 A self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in *NodeJS*.
-
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster)
-[![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster)
 
 ## Installation
 + Clone the repo.
@@ -16,8 +13,8 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 
 | Key | Type | Example | Description |
 | --- | --- | --- | --- |
-| apiId | *Integer*| 123456 | Yubico API ID - get one at: https://upgrade.yubico.com/getapikey/ |
-| apiKey | *String* | abcdef | Yubico API Key - get one at: https://upgrade.yubico.com/getapikey/ |
+| apiId | *Integer array*| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
+| apiKey | *String array* | [abcdef, fedcba] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
 | username | *String* | admin | The desired username needed to upload files |
 | domainName | *String* | http://your.domain.name/ | Your TLD or subdomain (path relative to Dumpster's root) |
 | uploadFolder | *String* | uploads/ | The folder where the uploaded files will be placed (relative to Dumpster's root) |
@@ -33,6 +30,6 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 *Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply.
 
 ### Credits
-Many thanks to [Adam Baldwin (evilpacket)][1], who wrote [an awesome library][2] to verify a YubiKey's OTP. It's quite old, but I've found it to be performing better than newer libraries.
-[1]: https://github.com/evilpacket
-[2]: https://github.com/evilpacket/node-yubikey
+The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s'][2] repo. It's quite old, but I've found it to better suit my needs than newer or more complex libraries.
+[1]: https://github.com/evilpacket/node-yubikey
+[2]: https://github.com/evilpacket
