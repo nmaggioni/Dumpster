@@ -45,22 +45,16 @@ app.use(bodyParser.urlencoded({
 }));
 
 var authUpload = function(req, res, next) {
-    var user = req.query.user;
     var token = req.query.token;
-    if (user === config.username) {
-        yubikey.verify(token, function(isValid, status) {
-            if (isValid) {
-                logWrapper("Valid token: " + token);
-                next();
-            } else {
-                logWrapper("Invalid token: " + token + " (Reason: " + status + ")");
-                res.status(401).send("AUTH ERROR - " + status + "\n");
-            }
-        });
-    } else {
-        logWrapper("Invalid user: " + user);
-        res.status(401).send("AUTH ERROR - Invalid user\n");
-    }
+    yubikey.verify(token, function(isValid, status) {
+        if (isValid) {
+            logWrapper("Valid token: " + token);
+            next();
+        } else {
+            logWrapper("Invalid token: " + token + " (Reason: " + status + ")");
+            res.status(401).send("AUTH ERROR - " + status + "\n");
+        }
+    });
 }
 
 var uploadedFileURL = null;
