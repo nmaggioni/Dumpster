@@ -43,7 +43,7 @@ Here's another example, this time using [HTTPie][3] and giving the MD5 sum of th
 http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&token=YUBIKEYOTP" file@~/path/to/my_file.pdf
 ```
 
-*Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed next to the error code.
+*Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed next to the error code. If you gave the file's MD5, `GOOD CHECKSUM` or `BAD CHECKSUM` will appear next to the status code.
 
 ### Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo. It's quite old, but I've found it to better suit my needs than newer or more complex libraries.
