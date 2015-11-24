@@ -82,7 +82,7 @@ var storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname + '-' + Date.now());
+    cb(null, Date.now() + '-' + file.originalname.replace(/[^0-9A-Za-z\.]+/g, "_").replace(/\.\.+/g, "_"));
   }
 })
 
