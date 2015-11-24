@@ -7,9 +7,19 @@ var path = require('path');
 var fs = require('fs');
 var yubikey = require('./lib/yubikey.js');
 
-function logWrapper(message) {
+function infoWrapper(message) {
     var timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     winston.log('info', "[" + timestamp + "] %s", message);
+}
+
+function warningWrapper(message) {
+    var timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    winston.log('warn', "[" + timestamp + "] %s", message);
+}
+
+function errorWrapper(message) {
+    var timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    winston.log('error', "[" + timestamp + "] %s", message);
 }
 
 /* --- Configuration parsing --- */
@@ -20,15 +30,15 @@ var apiConfigIsArray = false;
 if (Object.prototype.toString.call(config.apiId) === '[object Array]') {
     if (Object.prototype.toString.call(config.apiKey) === '[object Array]') {
         if (config.apiId.length !== config.apiKey.length) {
-            logWrapper('Configuration mismatch: not the same number of API IDs and Keys.');
+            errorWrapper('Configuration mismatch: not the same number of API IDs and Keys.');
             process.exit(1);
         }
     } else {
-        logWrapper('Configuration mismatch: API Keys field is not an array.');
+        errorWrapper('Configuration mismatch: API Keys field is not an array.');
         process.exit(1);
     }
 } else {
-    logWrapper('Configuration mismatch: API IDs field is not an array.');
+    errorWrapper('Configuration mismatch: API IDs field is not an array.');
     process.exit(1);
 }
 yubikey.apiId = config.apiId;
@@ -36,6 +46,7 @@ yubikey.apiKey = config.apiKey;
 
 var uploadPath = config.uploadFolder;
 var domainUrl = config.domainName + uploadPath;
+var debug = config.debug || false;
 
 /* --- End configuration parsing --- */
 
@@ -45,13 +56,18 @@ app.use(bodyParser.urlencoded({
 }));
 
 var authUpload = function(req, res, next) {
+    if (debug) {
+        warningWrapper("Bypassing token validation.");
+        next();
+        return;
+    }
     var token = req.query.token;
     yubikey.verify(token, function(isValid, status) {
         if (isValid) {
-            logWrapper("Valid token received.");
+            infoWrapper("Valid token received.");
             next();
         } else {
-            logWrapper("Invalid token received! Reason: " + status);
+            warningWrapper("Invalid token received! Reason: " + status);
             res.status(401).send("AUTH ERROR - " + status + "\n");
         }
     });
@@ -69,11 +85,11 @@ var upload = multer({
         fileSize: config.maxFileSize
     },
     onFileUploadStart: function(file) {
-        logWrapper("Accepting upload: " + file.originalname + " (" + file.size + " bytes, " + file.mimetype + ")");
+        infoWrapper("Accepting upload: " + file.originalname + " (" + file.size + " bytes, " + file.mimetype + ")");
         uploadedFileURL = null;
     },
     onFileUploadComplete: function(file) {
-        logWrapper("File '" + file.originalname + "' uploaded to " + file.path);
+        infoWrapper("File '" + file.originalname + "' uploaded to " + file.path);
         uploadedFileURL = domainUrl + path.basename(file.path);
     }
 }).single('file');
@@ -89,6 +105,9 @@ app.get('/uploads/*', function(req, res) {
 });
 
 app.listen(9980, function() {
-    logWrapper("Starting Dumpster on port 9980");
+    infoWrapper("Starting Dumpster on port 9980");
+    if (debug) {
+        warningWrapper("Debug mode is enabled!");
+    }
 });
 
