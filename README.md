@@ -21,13 +21,18 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 ## Usage
 *Dumpster* is really easy to use, and mainly meant to be called from CLI. Here's a cURL usage example:
 
-`curl --progress-bar -F "file=@/path/to/file" "http://dumpster.your.domain/api/upload?token=YUBIKEYOTP" | tee /dev/null`
+`curl --progress-bar -F "file=@/path/to/my_file.pdf" "http://localhost:9980/api/upload?token=YUBIKEYOTP" | tee /dev/null`
 
 + The trailing `tee /dev/null` is needed to show the progress bar. You may as well replace it with `grep -v '^$'` or equivalent;
+
+Here's another example, this time using [HTTPie][3]:
+`http -f POST "http://localhost:9980/api/upload?token=YUBIKEYOTP" file@~/path/to/my_file.pdf`
 
 *Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply.
 
 ### Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s'][2] repo. It's quite old, but I've found it to better suit my needs than newer or more complex libraries.
+
 [1]: https://github.com/evilpacket/node-yubikey
 [2]: https://github.com/evilpacket
+[3]: https://github.com/jkbrzt/httpie
