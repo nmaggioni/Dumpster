@@ -48,10 +48,10 @@ var authUpload = function(req, res, next) {
     var token = req.query.token;
     yubikey.verify(token, function(isValid, status) {
         if (isValid) {
-            logWrapper("Valid token: " + token);
+            logWrapper("Valid token received.");
             next();
         } else {
-            logWrapper("Invalid token: " + token + " (Reason: " + status + ")");
+            logWrapper("Invalid token received! Reason: " + status);
             res.status(401).send("AUTH ERROR - " + status + "\n");
         }
     });
