@@ -72,29 +72,25 @@ var authUpload = function(req, res, next) {
     });
 }
 
-var uploadedFileURL = null;
-var upload = multer({
-    dest: uploadPath,
-    rename: function(fieldname, filename) {
-        return filename + Date.now();
-    },
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, uploadPath);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + '-' + Date.now());
+  }
+})
+
+var upload = multer({ storage: storage,
     limits: {
         fields: 0, // No extra POST fields
-        fieldSize: config.maxFileSize,
         fileSize: config.maxFileSize
-    },
-    onFileUploadStart: function(file) {
-        infoWrapper("Accepting upload: " + file.originalname + " (" + file.size + " bytes, " + file.mimetype + ")");
-        uploadedFileURL = null;
-    },
-    onFileUploadComplete: function(file) {
-        infoWrapper("File '" + file.originalname + "' uploaded to " + file.path);
-        uploadedFileURL = domainUrl + path.basename(file.path);
     }
 }).single('file');
 
 var postUpload = function(req, res) {
-    res.end("OK - " + uploadedFileURL + "\n");
+    infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "'");
+    res.end("OK - " + domainUrl + path.basename(req.file.path) + "\n");
 }
 
 app.post('/api/upload', authUpload, upload, postUpload);
