@@ -4,8 +4,8 @@ A self-hosted and API-based file upload server supporting YubiKey OTP authentica
 ## Installation
 + Clone the repo.
 + Navigate to the cloned directory and issue `npm install`.
-+ Edit the configuration file (see the **Configuration** section).
-+ Enjoy *Dumpster* with `node server.js`!
++ Edit the configuration file (see the [Configuration](#configuration) section).
++ Enjoy *Dumpster* with `npm start`!
 
 > Protip: schedule a cron job to delete uploaded files every fixed time lapse, and voilà! You've got your personal temporary file upload server.
 

@@ -1,13 +1,27 @@
 {
-  "name": "Dumpster",
-  "version": "1.0.0",
-  "description": "Self-hosted and API-based file upload server.",
-  "license": "MIT",
-  "repository": "http://github.com/nmaggioni/Dumpster",
+  "name": "dumpster",
+  "version": "2.0.0",
+  "description": "Self-hosted and API-based file upload server supporting YubiKey OTP authentication.",
+  "main": "server.js",
   "dependencies": {
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "multer": "^1.1.0",
     "winston": "^2.1.1"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmaggioni/Dumpster.git"
+  },
+  "author": "Niccolò Maggioni",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/nmaggioni/Dumpster/issues"
+  },
+  "homepage": "https://github.com/nmaggioni/Dumpster#readme"
 }
