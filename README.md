@@ -36,7 +36,7 @@ http -f POST "http://localhost:9980/api/upload?token=YUBIKEYOTP" file@~/path/to/
 *Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed next to the error code.
 
 ### Credits
-The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s'][2] repo. It's quite old, but I've found it to better suit my needs than newer or more complex libraries.
+The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo. It's quite old, but I've found it to better suit my needs than newer or more complex libraries.
 
 [1]: https://github.com/evilpacket/node-yubikey
 [2]: https://github.com/evilpacket
