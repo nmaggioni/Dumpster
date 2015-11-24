@@ -21,16 +21,26 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 | debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
 
 ## Usage
-*Dumpster* is really easy to use, and mainly meant to be called from CLI. Here's a cURL usage example:
+*Dumpster* is really easy to use, and mainly meant to be called from CLI. Refer to the following table for API parameters:
+
+| Parameter name | Required | Description |
+| --- | --- | --- |
+| **Base URL** | *yes* | *Dumpster*'s root plus `/api/upload`. For example: `http://localhost:9980/api/upload` |
+| token | yes | Your YubiKey's OTP. |
+| md5 | no | MD5 checksum of the file that you're uploading; if given, *Dumpster* will check its copy of the file against it. Direct pipe from `md5sum` is supported. |
+
+> The order of the parameters is irrelevant. Placing the token as the last one may however be advisable: that way the YubiKey itself will send the command by issuing the newline.
+
+Here's a cURL usage example:
 ```bash
 curl --progress-bar -F "file=@/path/to/my_file.pdf" "http://localhost:9980/api/upload?token=YUBIKEYOTP" | tee /dev/null
 ```
 
 > The trailing `tee /dev/null` is needed to show the progress bar. You may as well replace it with `grep -v '^$'` or any other output redirection.
 
-Here's another example, this time using [HTTPie][3]:
+Here's another example, this time using [HTTPie][3] and giving the MD5 sum of the file:
 ```bash
-http -f POST "http://localhost:9980/api/upload?token=YUBIKEYOTP" file@~/path/to/my_file.pdf
+http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&token=YUBIKEYOTP" file@~/path/to/my_file.pdf
 ```
 
 *Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed next to the error code.

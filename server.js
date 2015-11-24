@@ -5,6 +5,7 @@ var express = require("express");
 var app = express();
 var path = require('path');
 var fs = require('fs');
+var md5File = require('md5-file');
 var yubikey = require('./lib/yubikey.js');
 
 function infoWrapper(message) {
@@ -93,8 +94,21 @@ var upload = multer({ storage: storage,
 }).single('file');
 
 var postUpload = function(req, res) {
-    infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "'");
-    res.end("OK - " + domainUrl + path.basename(req.file.path) + "\n");
+    var md5query = req.query.md5;
+    var md5uploaded;
+    if (md5query) {
+        md5query = md5query.substr(0, md5query.indexOf(' '));  // allows piping from md5sum
+        md5uploaded = md5File(req.file.path).toString();
+        if (md5uploaded === md5query) {
+            infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 OK");
+            res.end("OK - GOOD CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
+        } else {
+            infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD (" + md5uploaded + " vs " + md5query + ")");
+            res.end("OK - BAD CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
+        }
+    } else {
+        res.end("OK - NO CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
+    }
 }
 
 app.post('/api/upload', authUpload, upload, postUpload);
