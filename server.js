@@ -97,13 +97,19 @@ var postUpload = function(req, res) {
     var md5query = req.query.md5;
     var md5uploaded;
     if (md5query) {
-        md5query = md5query.substr(0, md5query.indexOf(' '));  // allows piping from md5sum
+        if (md5query.indexOf(' ') !== -1) {
+            md5query = md5query.substr(0, md5query.indexOf(' '));  // allows piping from md5sum
+        }
         md5uploaded = md5File(req.file.path).toString();
         if (md5uploaded === md5query) {
             infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 OK");
             res.end("OK - GOOD CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
         } else {
-            infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD (" + md5uploaded + " vs " + md5query + ")");
+            if (debug) {
+                infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD (" + md5uploaded + " vs " + md5query + ")");
+            } else {
+                infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD");
+            }
             res.end("OK - BAD CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
         }
     } else {
