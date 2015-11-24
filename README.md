@@ -15,15 +15,13 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 | --- | --- | --- | --- |
 | apiId | *Integer array*| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
 | apiKey | *String array* | [abcdef, fedcba] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
-| username | *String* | admin | The desired username needed to upload files |
-| domainName | *String* | http://your.domain.name/ | Your TLD or subdomain (path relative to Dumpster's root) |
 | uploadFolder | *String* | uploads/ | The folder where the uploaded files will be placed (relative to Dumpster's root) |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in bytes (remember to adjust your web server accordingly!) |
 
 ## Usage
 *Dumpster* is really easy to use, and mainly meant to be called from CLI. Here's a cURL usage example:
 
-`curl --progress-bar -F "file=@/path/to/file" "http://dumpster.your.domain/api/upload?user=admin&token=yubikeyotp" | tee /dev/null`
+`curl --progress-bar -F "file=@/path/to/file" "http://dumpster.your.domain/api/upload?token=YUBIKEYOTP" | tee /dev/null`
 
 + The trailing `tee /dev/null` is needed to show the progress bar. You may as well replace it with `grep -v '^$'` or equivalent;
 
