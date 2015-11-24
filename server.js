@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var authUpload = function (req, res, next) {
   var user = req.query.user;
   var token = req.query.token;
-  if (user == config.username) {
+  if (user === config.username) {
     yubikey.verify(token, function(isValid) {
       if (isValid) {
         logWrapper("Valid token: " + token);
@@ -62,7 +62,7 @@ var upload = multer({
   }
 });
 
-var postUpload = function (req, res, next) {
+var postUpload = function (req, res) {
     res.end("OK - " + uploadedFileURL + "\n");
 }
 
