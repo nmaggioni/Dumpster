@@ -25,7 +25,6 @@ function errorWrapper(message) {
 /* --- Configuration parsing --- */
 
 var config = JSON.parse(fs.readFileSync('lib/config.js'));
-var apiConfigIsArray = false;
 
 if (Object.prototype.toString.call(config.apiId) === '[object Array]') {
     if (Object.prototype.toString.call(config.apiKey) === '[object Array]') {
