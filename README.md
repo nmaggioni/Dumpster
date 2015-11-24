@@ -25,7 +25,7 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 
 | Parameter name | Required | Description |
 | --- | --- | --- |
-| **Base URL** | *yes* | *Dumpster*'s root plus `/api/upload`. For example: `http://localhost:9980/api/upload` |
+| **Base URL** | - | *Dumpster*'s root plus `/api/upload`. For example: `http://localhost:9980/api/upload` |
 | token | yes | Your YubiKey's OTP. |
 | md5 | no | MD5 checksum of the file that you're uploading; if given, *Dumpster* will check its copy of the file against it. Direct pipe from `md5sum` is supported. |
 
