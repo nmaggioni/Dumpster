@@ -29,7 +29,11 @@ var config = JSON.parse(fs.readFileSync('lib/config.js'));
 if (Object.prototype.toString.call(config.apiId) === '[object Array]') {
     if (Object.prototype.toString.call(config.apiKey) === '[object Array]') {
         if (config.apiId.length !== config.apiKey.length) {
-            errorWrapper('Configuration mismatch: not the same number of API IDs and Keys.');
+            if (config.apiId.length === 0 || config.apiKey.length === 0) {
+                errorWrapper('Configuration missing: have you edited the defaults in "lib/config.js"?');
+            } else {
+                errorWrapper('Configuration mismatch: not the same number of API IDs and Keys.');
+            }
             process.exit(1);
         }
     } else {
