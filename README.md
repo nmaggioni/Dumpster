@@ -1,5 +1,5 @@
 # Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster)
-A self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in *NodeJS*.
+A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in *NodeJS*.
 
 ## Installation
 + Clone the repo.
