@@ -89,7 +89,9 @@ var validateUpload = function(req, res, next) {
     var deletionQuery = req.query.del,
         deletionDay,
         deletionMonth,
-        deletionYear;
+        deletionYear,
+        deletionHour,
+        deletionMinute;
     if (deletionQuery) {
         if (/^[0-9]+s$/.test(deletionQuery)) {
             deletionDate = moment().add(deletionQuery.substr(0, deletionQuery.indexOf('s')), 'seconds');
