@@ -7,17 +7,15 @@ A lightweight, self-hosted and API-based file upload server supporting YubiKey O
 + Edit the configuration file (see the [Configuration](#configuration) section).
 + Enjoy *Dumpster* with `npm start`!
 
-> Protip: schedule a cron job to delete uploaded files every fixed time lapse, and voilà! You've got your personal temporary file upload server.
-
 ## Configuration
 Edit the `config.js` file in the `lib` directory according to the following table.
 
-| Key | Type | Example/Default | Description |
+| Key | Type | Example / Default | Description |
 | --- | --- | --- | --- |
 | apiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
 | apiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
 | uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root) |
-| maxFileSize | *Integer* | 52428800 | The maximum upload dimension in bytes (remember to adjust your web server accordingly!) |
+| maxFileSize | *Integer* | 52428800 | The maximum upload dimension in bytes (remember to [adjust your web server accordingly][4]!) |
 | maxFileExpiration | *Integer* | 30 | The maximum time after which the files will be deleted from the server. **If *Dumpster* is stopped, currently uploaded files will not be deleted.** |
 | debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
 
@@ -40,16 +38,17 @@ curl --progress-bar -F "file=@/path/to/my_file.pdf" "http://localhost:9980/api/u
 
 > The trailing `tee /dev/null` is needed to show the progress bar. You may as well replace it with `grep -v '^$'` or any other output redirection.
 
-Here's another example, this time using [HTTPie][3] and giving the MD5 sum of the file:
+Here's another example, this time using [HTTPie][3] and giving the MD5 sum of the file as well as an expiration date of 3 days:
 ```bash
-http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&token=YUBIKEYOTP" file@~/path/to/my_file.pdf
+http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&del=3d&token=YUBIKEYOTP" file@~/path/to/my_file.pdf
 ```
 
 *Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed next to the error code. If you gave the file's MD5, `GOOD CHECKSUM` or `BAD CHECKSUM` will appear next to the status code.
 
 ### Credits
-The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo. It's quite old, but I've found it to better suit my needs than newer or more complex libraries.
+The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo.
 
 [1]: https://github.com/evilpacket/node-yubikey
 [2]: https://github.com/evilpacket
 [3]: https://github.com/jkbrzt/httpie
+[4]: http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size
