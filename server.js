@@ -81,6 +81,7 @@ var authUpload = function(req, res, next) {
 }
 
 var dateOk = false;
+var deletionDate;
 var validateUpload = function(req, res, next) {
     var deletionQuery = req.query.removal, // DDdMMmYYYYy
         deletionDay,
@@ -90,13 +91,9 @@ var validateUpload = function(req, res, next) {
         deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('d'));
         deletionMonth = deletionQuery.substr(deletionQuery.indexOf('d') + 1, deletionQuery.indexOf('m'));
         deletionYear = deletionQuery.substr(deletionQuery.indexOf('m') + 1, deletionQuery.length);
-        var deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear, "DD-MM-YYYY");
+        deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear, "DD-MM-YYYY");
         if (deletionDate.isValid()) {  // TODO: return codes (http://momentjs.com/docs/#/parsing/is-valid/)
             infoWrapper("Valid deletion date received.");
-            schedule.scheduleJob(deletionDate, function(path){
-                fs.unlinkSync(path);
-            }).bind(null, req.file.path);
-            infoWrapper("Deletion job scheduled.");
             dateOk = true;
             next();
         } else {
@@ -130,6 +127,16 @@ var upload = multer({ storage: storage,
 
 var postUpload = function(req, res) {
     var responseText;
+    if (dateOk) {
+        var j = schedule.scheduleJob(deletionDate.toDate(), function(path){
+            fs.unlinkSync(path);
+        }.bind(null, req.file.path));
+        if (debug) {
+            infoWrapper("Deletion job scheduled for: " + deletionDate.toString());
+        } else {
+            infoWrapper("Deletion job scheduled.");
+        }
+    }
     var md5query = req.query.md5;
     var md5uploaded;
     if (md5query) {
@@ -152,10 +159,9 @@ var postUpload = function(req, res) {
         responseText = "OK - NO CHECKSUM";
     }
     if (dateOk) {
-        responseText.concat(" - GOOD DELETION DATE");
-    } else {
-        res.end(responseText + " - " + domainUrl + path.basename(req.file.path) + "\n");
+        responseText = responseText + " - GOOD DELETION DATE";
     }
+    res.end(responseText + " - " + domainUrl + path.basename(req.file.path) + "\n");
 }
 
 app.post('/api/upload', authUpload, validateUpload, upload, postUpload);
