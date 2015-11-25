@@ -6,7 +6,10 @@ var app = express();
 var path = require('path');
 var fs = require('fs');
 var md5File = require('md5-file');
+var moment = require('moment');
+var schedule = require('node-schedule');
 var yubikey = require('./lib/yubikey.js');
+moment().format();
 
 function infoWrapper(message) {
     var timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -77,6 +80,38 @@ var authUpload = function(req, res, next) {
     });
 }
 
+var dateOk = false;
+var validateUpload = function(req, res, next) {
+    var deletionQuery = req.query.removal, // DDdMMmYYYYy
+        deletionDay,
+        deletionMonth,
+        deletionYear;
+    if (deletionQuery) {
+        deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('d'));
+        deletionMonth = deletionQuery.substr(deletionQuery.indexOf('d') + 1, deletionQuery.indexOf('m'));
+        deletionYear = deletionQuery.substr(deletionQuery.indexOf('m') + 1, deletionQuery.length);
+        var deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear, "DD-MM-YYYY");
+        if (deletionDate.isValid()) {  // TODO: return codes (http://momentjs.com/docs/#/parsing/is-valid/)
+            infoWrapper("Valid deletion date received.");
+            schedule.scheduleJob(deletionDate, function(path){
+                fs.unlinkSync(path);
+            }).bind(null, req.file.path);
+            infoWrapper("Deletion job scheduled.");
+            dateOk = true;
+            next();
+        } else {
+            if (debug) {
+                warningWrapper("Invalid deletion date received: " + deletionDate.toString());
+            } else {
+                warningWrapper("Invalid deletion date received!");
+            }
+            res.status(400).send("BAD DELETION DATE\n");
+        }
+    } else {
+        next();
+    }
+}
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadPath);
@@ -94,6 +129,7 @@ var upload = multer({ storage: storage,
 }).single('file');
 
 var postUpload = function(req, res) {
+    var responseText;
     var md5query = req.query.md5;
     var md5uploaded;
     if (md5query) {
@@ -103,21 +139,26 @@ var postUpload = function(req, res) {
         md5uploaded = md5File(req.file.path).toString();
         if (md5uploaded === md5query) {
             infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 OK");
-            res.end("OK - GOOD CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
+            responseText = "OK - GOOD CHECKSUM";
         } else {
             if (debug) {
                 infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD (" + md5uploaded + " vs " + md5query + ")");
             } else {
                 infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD");
             }
-            res.end("OK - BAD CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
+            responseText = "OK - BAD CHECKSUM";
         }
     } else {
-        res.end("OK - NO CHECKSUM - " + domainUrl + path.basename(req.file.path) + "\n");
+        responseText = "OK - NO CHECKSUM";
+    }
+    if (dateOk) {
+        responseText.concat(" - GOOD DELETION DATE");
+    } else {
+        res.end(responseText + " - " + domainUrl + path.basename(req.file.path) + "\n");
     }
 }
 
-app.post('/api/upload', authUpload, upload, postUpload);
+app.post('/api/upload', authUpload, validateUpload, upload, postUpload);
 
 app.get('/uploads/*', function(req, res) {
     res.sendFile(__dirname + req.url);
