@@ -114,7 +114,11 @@ var validateUpload = function(req, res, next) {
         }
         if (deletionDate.isValid()) {  // TODO: return codes (http://momentjs.com/docs/#/parsing/is-valid/)
             if (deletionDate.isAfter(moment().add(maxFileExpiration, 'days'))) {
-                warningWrapper("Too big deletion date received: " + deletionDate.toString() + " - setting to maximum value.");
+                if (debug) {
+                    warningWrapper("Too big deletion date received: " + deletionDate.toString() + " - setting to maximum value.");
+                } else {
+                    warningWrapper("Too big deletion date received, setting to maximum value.");
+                }
                 deletionDate = moment().add(maxFileExpiration, 'days');
                 dateOk = 2;
             } else {
