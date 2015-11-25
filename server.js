@@ -81,7 +81,7 @@ var authUpload = function(req, res, next) {
     });
 }
 
-var dateOk = 0;
+var dateOk = false;
 var deletionDate;
 var validateUpload = function(req, res, next) {
     var deletionQuery = req.query.del,
@@ -120,15 +120,16 @@ var validateUpload = function(req, res, next) {
                     warningWrapper("Too big deletion date received, setting to maximum value.");
                 }
                 deletionDate = moment().add(maxFileExpiration, 'days');
-                dateOk = 2;
+                res.header('Dumpster-Deletion-Date', 'MAX');
             } else {
                 if (debug) {
                     infoWrapper("Valid deletion date received: " + deletionDate.toString());
                 } else {
                     infoWrapper("Valid deletion date received.");
                 }
-                dateOk = 1;
+                res.header('Dumpster-Deletion-Date', 'OK');
             }
+            dateOk = true;
             next();
         } else {
             if (debug) {
@@ -139,6 +140,7 @@ var validateUpload = function(req, res, next) {
             res.status(400).send("BAD DELETION DATE\n");
         }
     } else {
+        res.header('Dumpster-Deletion-Date', 'NONE');
         next();
     }
 }
@@ -160,7 +162,6 @@ var upload = multer({ storage: storage,
 }).single('file');
 
 var postUpload = function(req, res) {
-    var responseText;
     if (dateOk) {
         var j = schedule.scheduleJob(deletionDate.toDate(), function(path){
             fs.unlinkSync(path);
@@ -180,27 +181,25 @@ var postUpload = function(req, res) {
         md5uploaded = md5File(req.file.path).toString();
         if (md5uploaded === md5query) {
             infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 OK");
-            responseText = "OK - GOOD CHECKSUM";
+            res.header('Dumpster-Checksum', 'OK');
         } else {
             if (debug) {
                 infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD (" + md5uploaded + " vs " + md5query + ")");
             } else {
                 infoWrapper("File '" + req.file.originalname + "' uploaded to '" + req.file.path + "', MD5 BAD");
             }
-            responseText = "OK - BAD CHECKSUM";
+            res.header('Dumpster-Checksum', 'BAD');
         }
     } else {
-        responseText = "OK - NO CHECKSUM";
+        res.header('Dumpster-Checksum', 'NONE');
     }
-    if (dateOk === 1) {
-        responseText += " - GOOD DELETION DATE";
-    } else if (dateOk === 2) {
-        responseText += " - MAX DELETION DATE";
-    } else {
-        responseText += " - NO DELETION DATE";
-    }
-    res.end(responseText + " - " + domainUrl + path.basename(req.file.path) + "\n");
+    res.end(domainUrl + path.basename(req.file.path) + "\n");
 }
+
+app.all('/*', function(req, res, next) {
+    res.header('X-Powered-By', 'Dumpster');
+    next();
+});
 
 app.post('/api/upload', authUpload, validateUpload, upload, postUpload);
 

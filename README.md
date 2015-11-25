@@ -43,7 +43,23 @@ Here's another example, this time using [HTTPie][3] and giving the MD5 sum of th
 http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&del=3d&token=YUBIKEYOTP" file@~/path/to/my_file.pdf
 ```
 
-*Dumpster*'s answer will either be `AUTH ERROR` or `OK` - pretty self-explanatory, huh? - if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed next to the error code. If you gave the file's MD5, `GOOD CHECKSUM` or `BAD CHECKSUM` will appear next to the status code.
+*Dumpster*'s answer will span across headers and body: if the upload succeeded you'll receive the link to download the file in the body of the reply, if something went wrong the reason will be printed in it instead. The headers description follows:
+
+###### Dumpster-Checksum
+
+| Value | Meaning |
+| --- | --- |
+| `OK` | The checksum has been verified correctly. |
+| `BAD` | The checksum verification failed; the uploaded file is probably corrupted. |
+| `NONE` | No checksum has been given. |
+
+###### Dumpster-Deletion-Date
+
+| Value | Meaning |
+| --- | --- |
+| `OK` | The given deletion date for the file was valid and has been accepted. |
+| `MAX` | The given deletion date for the file was too large; it has been cut down to the [maximum allowed value](#configuration). |
+| `NONE` | No file deletion date has been given. The [default one](#configuration) has been applied. |
 
 ### Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo.
