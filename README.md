@@ -12,13 +12,13 @@ A lightweight, self-hosted and API-based file upload server supporting YubiKey O
 ## Configuration
 Edit the `config.js` file in the `lib` directory according to the following table.
 
-| Key | Type | Example | Description |
+| Key | Type | Example/Default | Description |
 | --- | --- | --- | --- |
 | apiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
-| apiKey | *String* array | [abcdef, fedcba] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
-| uploadFolder | *String* | uploads/ | The folder where the uploaded files will be placed (relative to Dumpster's root) |
+| apiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
+| uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root) |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in bytes (remember to adjust your web server accordingly!) |
-| maxFileExpiration | *Integer* | 30 | The maximum time after which the files will be deleted from the server. **Note: if *Dumpster* is stopped, currently uploaded files will not be deleted.** |
+| maxFileExpiration | *Integer* | 30 | The maximum time after which the files will be deleted from the server. **If *Dumpster* is stopped, currently uploaded files will not be deleted.** |
 | debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
 
 ## Usage
