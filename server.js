@@ -81,9 +81,11 @@ var authUpload = function(req, res, next) {
     });
 }
 
-var dateOk = false;
+var dateOk;
 var deletionDate;
 var validateUpload = function(req, res, next) {
+    dateOk = false;
+    deletionDate = undefined;
     var deletionQuery = req.query.del,
         deletionDay,
         deletionMonth,
@@ -201,7 +203,15 @@ app.all('/*', function(req, res, next) {
     next();
 });
 
-app.post('/api/upload', authUpload, validateUpload, upload, postUpload);
+app.post('/api/upload', authUpload, validateUpload, function(req, res, next){
+    upload(req, res, function(err) {
+        if (err) {
+            res.status(400).send("UPLOAD FAILED - FILE TOO BIG?\n");
+        } else {
+            next();
+        }
+    });
+}, postUpload);
 
 app.get('/uploads/*', function(req, res) {
     res.sendFile(__dirname + req.url);
