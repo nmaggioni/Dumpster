@@ -53,6 +53,8 @@ yubikey.apiKey = config.apiKey;
 
 var uploadPath = config.uploadFolder;
 var domainUrl = config.domainName + uploadPath;
+var maxFileSize = config.maxFileSize;
+var maxFileExpiration = config.maxFileExpiration;
 var debug = config.debug || false;
 
 /* --- End configuration parsing --- */
@@ -109,16 +111,21 @@ var validateUpload = function(req, res, next) {
             deletionMinute = deletionQuery.substr(deletionQuery.indexOf('h') + 1, deletionQuery.indexOf('m'));
             deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear + " " + deletionHour + ":" + deletionMinute, "DD-MM-YYYY HH:mm");
         } else {
-            deletionDate = moment(null);  // poor man's date invalidation
+            deletionDate = moment.invalid();
         }
         if (deletionDate.isValid()) {  // TODO: return codes (http://momentjs.com/docs/#/parsing/is-valid/)
-            if (debug) {
-                infoWrapper("Valid deletion date received: " + deletionDate.toString());
+            if (deletionDate.isAfter(moment().add(maxFileExpiration, 'days'))) {
+                warningWrapper("Too big deletion date received: " + deletionDate.toString() + " - setting to maximum value.");
+                deletionDate = moment().add(maxFileExpiration, 'days');
             } else {
-                infoWrapper("Valid deletion date received.");
+                if (debug) {
+                    infoWrapper("Valid deletion date received: " + deletionDate.toString());
+                } else {
+                    infoWrapper("Valid deletion date received.");
+                }
+                dateOk = true;
+                next();
             }
-            dateOk = true;
-            next();
         } else {
             if (debug) {
                 warningWrapper("Invalid deletion date received: " + deletionDate.toString());
@@ -144,7 +151,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage,
     limits: {
         fields: 0, // No extra POST fields
-        fileSize: config.maxFileSize
+        fileSize: maxFileSize
     }
 }).single('file');
 

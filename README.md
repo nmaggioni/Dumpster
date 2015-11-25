@@ -18,6 +18,7 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 | apiKey | *String* array | [abcdef, fedcba] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
 | uploadFolder | *String* | uploads/ | The folder where the uploaded files will be placed (relative to Dumpster's root) |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in bytes (remember to adjust your web server accordingly!) |
+| maxFileExpiration | *Integer* | 30 | The maximum time after which the files will be deleted from the server. **Note: if *Dumpster* is stopped, currently uploaded files will not be deleted.** |
 | debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
 
 ## Usage
@@ -28,7 +29,7 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 | **Base URL** | - | *Dumpster*'s root plus `/api/upload`. For example: `http://localhost:9980/api/upload` |
 | token | yes | Your YubiKey's OTP. |
 | md5 | no | MD5 checksum of the file that you're uploading; if given, *Dumpster* will check its copy of the file against it. Direct pipe from `md5sum` is supported. |
-| del | no | Time to file deletion; if given, the uploaded file will be deleted at the specified time/date. The allowed formats are (where `?` is a number): `??s` for seconds from now, `??m` for minutes from now, `??h` for hours from now, `??d` for days from now, `??D??M????Y` for a specified date (at midnight), and `??D??M????Y??h??m` for specified date and time. |
+| del | no | Time to file deletion; if given, the uploaded file will be deleted at the specified time/date. The allowed formats are (where `?` is a number): `??s` for seconds from now, `??m` for minutes from now, `??h` for hours from now, `??d` for days from now, `??D??M????Y` for a specified date (at midnight), and `??D??M????Y??h??m` for specified date and time. If the specified time exceeds the maximum setting, the maximum value will be used. |
 
 > The order of the parameters is irrelevant. Placing the token as the last one may however be advisable: that way the YubiKey itself will send the command by issuing the newline.
 
