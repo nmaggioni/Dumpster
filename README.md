@@ -15,8 +15,9 @@ Edit the `config.js` file in the `lib` directory according to the following tabl
 | apiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
 | apiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
 | uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root) |
-| maxFileSize | *Integer* | 52428800 | The maximum upload dimension in bytes (remember to [adjust your web server accordingly][4]!) |
-| maxFileExpiration | *Integer* | 30 | The maximum time after which the files will be deleted from the server. **If *Dumpster* is stopped, currently uploaded files will not be deleted.** |
+| maxFileSize | *Integer* | 52428800 | The maximum upload dimension in **bytes** (remember to [adjust your web server accordingly][4]!) |
+| maxFileExpiration | *Integer* | 30 | The maximum time in **days** after which the files will be deleted from the server. **If *Dumpster* is stopped, currently uploaded files will not be deleted.** |
+| maxFileExpirationEnabled | *Boolean* | true | Toggles if files will be forced to be deleted from the server after `maxFileExpiration` time or not. If disabled, files will remain stored until you (or another program) manually remove them from the uploads directory. |
 | debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
 
 ## Usage
