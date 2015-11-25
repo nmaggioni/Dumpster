@@ -48,15 +48,14 @@ if (Object.prototype.toString.call(config.apiId) === '[object Array]') {
     errorWrapper('Configuration mismatch: API IDs field is not an array.');
     process.exit(1);
 }
+
 yubikey.apiId = config.apiId;
 yubikey.apiKey = config.apiKey;
-
-var uploadPath = config.uploadFolder;
-var domainUrl = config.domainName + uploadPath;
-var maxFileSize = config.maxFileSize;
-var maxFileExpiration = config.maxFileExpiration;
-var debug = config.debug || false;
-
+var uploadPath = config.uploadFolder || "uploads/",
+    domainUrl = (config.domainName || "http://localhost:9980/") + uploadPath,
+    maxFileSize = config.maxFileSize || 52428800,
+    maxFileExpiration = config.maxFileExpiration || 30,
+    debug = config.debug || false;
 /* --- End configuration parsing --- */
 
 app.use(bodyParser.json());
