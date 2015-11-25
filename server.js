@@ -88,10 +88,12 @@ var validateUpload = function(req, res, next) {
         deletionMonth,
         deletionYear;
     if (deletionQuery) {
-        deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('d'));
-        deletionMonth = deletionQuery.substr(deletionQuery.indexOf('d') + 1, deletionQuery.indexOf('m'));
-        deletionYear = deletionQuery.substr(deletionQuery.indexOf('m') + 1, deletionQuery.length);
-        deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear, "DD-MM-YYYY");
+        deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('D'));
+        deletionMonth = deletionQuery.substr(deletionQuery.indexOf('D') + 1, deletionQuery.indexOf('M'));
+        deletionYear = deletionQuery.substr(deletionQuery.indexOf('M') + 1, deletionQuery.indexOf('Y'));
+        deletionHour = deletionQuery.substr(deletionQuery.indexOf('Y') + 1, deletionQuery.indexOf('h'));
+        deletionMinute = deletionQuery.substr(deletionQuery.indexOf('h') + 1, deletionQuery.indexOf('m'));
+        deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear + " " + deletionHour + ":" + deletionMinute, "DD-MM-YYYY HH:mm");
         if (deletionDate.isValid()) {  // TODO: return codes (http://momentjs.com/docs/#/parsing/is-valid/)
             infoWrapper("Valid deletion date received.");
             dateOk = true;
