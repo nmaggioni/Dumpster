@@ -88,14 +88,35 @@ var validateUpload = function(req, res, next) {
         deletionMonth,
         deletionYear;
     if (deletionQuery) {
-        deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('D'));
-        deletionMonth = deletionQuery.substr(deletionQuery.indexOf('D') + 1, deletionQuery.indexOf('M'));
-        deletionYear = deletionQuery.substr(deletionQuery.indexOf('M') + 1, deletionQuery.indexOf('Y'));
-        deletionHour = deletionQuery.substr(deletionQuery.indexOf('Y') + 1, deletionQuery.indexOf('h'));
-        deletionMinute = deletionQuery.substr(deletionQuery.indexOf('h') + 1, deletionQuery.indexOf('m'));
-        deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear + " " + deletionHour + ":" + deletionMinute, "DD-MM-YYYY HH:mm");
+        if (/^[0-9]+s$/.test(deletionQuery)) {
+            deletionDate = moment().add(deletionQuery.substr(0, deletionQuery.indexOf('s')), 'seconds');
+        } else if (/^[0-9]+m$/.test(deletionQuery)) {
+            deletionDate = moment().add(deletionQuery.substr(0, deletionQuery.indexOf('m')), 'minutes');
+        } else if (/^[0-9]+h$/.test(deletionQuery)) {
+            deletionDate = moment().add(deletionQuery.substr(0, deletionQuery.indexOf('h')), 'hours');
+        } else if (/^[0-9]+d$/.test(deletionQuery)) {
+            deletionDate = moment().add(deletionQuery.substr(0, deletionQuery.indexOf('d')), 'days');
+        } else if (/^[0-9]{2}D[0-9]{2}M[0-9]{4}Y$/.test(deletionQuery)) {
+            deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('D'));
+            deletionMonth = deletionQuery.substr(deletionQuery.indexOf('D') + 1, deletionQuery.indexOf('M'));
+            deletionYear = deletionQuery.substr(deletionQuery.indexOf('M') + 1, deletionQuery.indexOf('Y'));
+            deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear, "DD-MM-YYYY");
+        } else if (/^[0-9]{2}D[0-9]{2}M[0-9]{4}Y[0-9]{2}h[0-9]{2}m$/.test(deletionQuery)) {
+            deletionDay = deletionQuery.substr(0, deletionQuery.indexOf('D'));
+            deletionMonth = deletionQuery.substr(deletionQuery.indexOf('D') + 1, deletionQuery.indexOf('M'));
+            deletionYear = deletionQuery.substr(deletionQuery.indexOf('M') + 1, deletionQuery.indexOf('Y'));
+            deletionHour = deletionQuery.substr(deletionQuery.indexOf('Y') + 1, deletionQuery.indexOf('h'));
+            deletionMinute = deletionQuery.substr(deletionQuery.indexOf('h') + 1, deletionQuery.indexOf('m'));
+            deletionDate = moment(deletionDay + "-" + deletionMonth + "-" + deletionYear + " " + deletionHour + ":" + deletionMinute, "DD-MM-YYYY HH:mm");
+        } else {
+            deletionDate = moment(null);  // poor man's date invalidation
+        }
         if (deletionDate.isValid()) {  // TODO: return codes (http://momentjs.com/docs/#/parsing/is-valid/)
-            infoWrapper("Valid deletion date received.");
+            if (debug) {
+                infoWrapper("Valid deletion date received: " + deletionDate.toString());
+            } else {
+                infoWrapper("Valid deletion date received.");
+            }
             dateOk = true;
             next();
         } else {
