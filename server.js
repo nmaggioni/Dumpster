@@ -1,19 +1,19 @@
-var multer = require('multer');
-var bodyParser = require('body-parser');
-var express = require("express");
-var app = express();
-var logger = require('./lib/logger.js');
-var validator = require('./lib/validator.js');
-var configParser = require('./lib/configParser');
+var multer = require('multer'),
+    bodyParser = require('body-parser'),
+    express = require("express"),
+    app = express(),
+    logger = require('./lib/logger.js'),
+    validator = require('./lib/validator.js'),
+    configParser = require('./lib/configParser');
 
 if (!configParser.parsed) {
 	if (!configParser.parse()) {
 		process.exit(1);
 	}
 }
-var uploadPath = configParser.uploadPath;
-var maxFileSize = configParser.maxFileSize;
-var debug = configParser.debug;
+var uploadPath = configParser.uploadPath,
+    maxFileSize = configParser.maxFileSize,
+    debug = configParser.debug;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
