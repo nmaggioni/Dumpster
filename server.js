@@ -81,7 +81,7 @@ var authUpload = function(req, res, next) {
     });
 }
 
-var dateOk = false;
+var dateOk = 0;
 var deletionDate;
 var validateUpload = function(req, res, next) {
     var deletionQuery = req.query.del,
@@ -116,15 +116,16 @@ var validateUpload = function(req, res, next) {
             if (deletionDate.isAfter(moment().add(maxFileExpiration, 'days'))) {
                 warningWrapper("Too big deletion date received: " + deletionDate.toString() + " - setting to maximum value.");
                 deletionDate = moment().add(maxFileExpiration, 'days');
+                dateOk = 2;
             } else {
                 if (debug) {
                     infoWrapper("Valid deletion date received: " + deletionDate.toString());
                 } else {
                     infoWrapper("Valid deletion date received.");
                 }
-                dateOk = true;
-                next();
+                dateOk = 1;
             }
+            next();
         } else {
             if (debug) {
                 warningWrapper("Invalid deletion date received: " + deletionDate.toString());
@@ -187,8 +188,12 @@ var postUpload = function(req, res) {
     } else {
         responseText = "OK - NO CHECKSUM";
     }
-    if (dateOk) {
-        responseText = responseText + " - GOOD DELETION DATE";
+    if (dateOk === 1) {
+        responseText += " - GOOD DELETION DATE";
+    } else if (dateOk === 2) {
+        responseText += " - MAX DELETION DATE";
+    } else {
+        responseText += " - NO DELETION DATE";
     }
     res.end(responseText + " - " + domainUrl + path.basename(req.file.path) + "\n");
 }
