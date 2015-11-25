@@ -83,7 +83,7 @@ var authUpload = function(req, res, next) {
 var dateOk = false;
 var deletionDate;
 var validateUpload = function(req, res, next) {
-    var deletionQuery = req.query.removal, // DDdMMmYYYYy
+    var deletionQuery = req.query.del,
         deletionDay,
         deletionMonth,
         deletionYear;
