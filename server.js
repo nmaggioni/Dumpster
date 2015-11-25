@@ -165,9 +165,10 @@ var upload = multer({ storage: storage,
 
 var postUpload = function(req, res) {
     if (dateOk) {
-        var j = schedule.scheduleJob(deletionDate.toDate(), function(path){
-            fs.unlinkSync(path);
-        }.bind(null, req.file.path));
+        schedule.scheduleJob(deletionDate.toDate(), function(file){
+            fs.unlinkSync(file.path);
+            infoWrapper("Deleted file: " + file.filename);
+        }.bind(null, req.file));
         if (debug) {
             infoWrapper("Deletion job scheduled for: " + deletionDate.toString());
         } else {
