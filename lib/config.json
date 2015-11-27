@@ -1,7 +1,7 @@
 {
     "apiId": [],
     "apiKey": [""],
-    "domainName": "http://your.domain.name/",
+    "domainName": "",
     "uploadFolder": "uploads/",
     "maxFileSize": 52428800,
     "maxFileExpiration": 30,
