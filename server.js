@@ -61,5 +61,5 @@ app.listen(9980, function () {
     if (debug) {
         logger.warning("Debug mode is enabled!");
     }
+    validator.checkUploadsDirectory();
 });
-
