@@ -8,7 +8,7 @@ A lightweight, self-hosted and API-based file upload server supporting YubiKey O
 + Enjoy *Dumpster* with `npm start`!
 
 ## Configuration
-Edit the `config.js` file in the `lib` directory according to the following table.
+Edit the `config.json` file in the `lib` directory according to the following table.
 
 | Key | Type | Example / Default | Description |
 | --- | --- | --- | --- |

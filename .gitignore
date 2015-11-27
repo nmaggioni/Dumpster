@@ -39,8 +39,8 @@ uploads
 # Vim swap
 *.swp
 
-# TODO file
-TODO
-
 # Test configuration files
 *.mine
+
+# JetBrains data
+.idea
