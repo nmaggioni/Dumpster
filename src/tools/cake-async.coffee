@@ -5,10 +5,10 @@
 # https://github.com/ricardobeat/cake-async
 #
 
-bus   = new (require('events').EventEmitter)
+bus = new (require('events').EventEmitter)
 queue = []
 state = false
-aid   = 0
+aid = 0
 
 run = (waiting = state) ->
     return if (state = waiting) or not next = queue.shift()
@@ -37,4 +37,3 @@ async.end = (cb) ->
     return
 
 module.exports = async
-
