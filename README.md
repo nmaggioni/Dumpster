@@ -1,11 +1,12 @@
 # Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster)
-A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in *NodeJS*.
+A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6].
 
 ## Installation
++ Ensure that [CoffeeScript is installed][7].
 + Clone the repo.
-+ Navigate to the cloned directory and issue `npm install`.
++ Navigate to the cloned directory and issue `cake build`.
 + Edit the configuration file (see the [Configuration](#configuration) section).
-+ Enjoy *Dumpster* with `npm start`!
++ Enjoy *Dumpster* with `npm start` or `node ./server.js`!
 
 ## Configuration
 Edit the `config.json` file in the `lib` directory according to the following table.
@@ -65,7 +66,14 @@ http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&del=3d&token=YUBIKEY
 ### Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo.
 
+Thanks to [Ricardo Tomasi][8] for the [cake-async][9] library used in the build script.
+
 [1]: https://github.com/evilpacket/node-yubikey
 [2]: https://github.com/evilpacket
 [3]: https://github.com/jkbrzt/httpie
 [4]: http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size
+[5]: https://nodejs.org/en/
+[6]: http://coffeescript.org/
+[7]: http://coffeescript.org/#installation
+[8]: https://github.com/ricardobeat
+[9]: https://github.com/ricardobeat/cake-async
