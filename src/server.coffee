@@ -1,10 +1,10 @@
-multer = require('multer')
-bodyParser = require('body-parser')
-express = require('express')
+multer = require 'multer'
+bodyParser = require 'body-parser'
+express = require 'express'
 app = express()
-logger = require('./lib/logger.js')
-validator = require('./lib/validator.js')
-configParser = require('./lib/configParser')
+logger = require './lib/logger.js'
+validator = require './lib/validator.js'
+configParser = require './lib/configParser'
 
 if !configParser.parsed
     if !configParser.parse()
