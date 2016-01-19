@@ -1,11 +1,12 @@
-yubikey = require('./yubikey.js')
-logger = require('./logger.js')
-configParser = require('./configParser.js')
-schedule = require('node-schedule')
-md5File = require('md5-file')
-path = require('path')
-fs = require('fs')
-moment = require('moment')
+yubikey = require './yubikey.js'
+logger = require './logger.js'
+configParser = require './configParser.js'
+schedule = require 'node-schedule'
+md5File = require 'md5-file'
+path = require 'path'
+fs = require 'fs'
+database = require './database'
+moment = require 'moment'
 moment().format()
 
 if !configParser.parsed
@@ -104,9 +105,12 @@ exports.date = (req, res, next) ->
 
 exports.scheduleDeletion = (req, res, next) ->
     if dateOk
+        database.put req.file.path, deletionDate
+
         schedule.scheduleJob deletionDate.toDate(), ((file) ->
             fs.unlinkSync file.path
             logger.info 'Deleted file: ' + file.filename
+            database.del file.path
         ).bind(null, req.file)
         if debug
             logger.info 'Deletion job scheduled for: ' + deletionDate.toString()

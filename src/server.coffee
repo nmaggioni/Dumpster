@@ -2,9 +2,10 @@ multer = require 'multer'
 bodyParser = require 'body-parser'
 express = require 'express'
 app = express()
-logger = require './lib/logger.js'
-validator = require './lib/validator.js'
+logger = require './lib/logger'
+validator = require './lib/validator'
 configParser = require './lib/configParser'
+database = require './lib/database'
 
 if !configParser.parsed
     if !configParser.parse()
@@ -49,3 +50,4 @@ app.listen 9980, ->
     if debug
         logger.warning 'Debug mode is enabled!'
     validator.checkUploadsDirectory()
+    database.loadScheduledDates()
