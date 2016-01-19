@@ -3,8 +3,8 @@ A lightweight, self-hosted and API-based file upload server supporting YubiKey O
 
 ## Installation
 + Ensure that [CoffeeScript is installed][7].
-+ Clone the repo.
-+ Navigate to the cloned directory and issue `cake build`.
++ Clone the repo or download the compiled release.
++ Navigate to the cloned/decompressed directory and issue `cake build` if you cloned the repo, `npm install` if you downloaded the compiled archive.
 + Edit the configuration file (see the [Configuration](#configuration) section).
 + Enjoy *Dumpster* with `npm start` or `node ./server.js`!
 
