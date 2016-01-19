@@ -1,5 +1,5 @@
 # Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster)
-A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6].
+A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6]. Persistence layer implemented with [LevelDB][10].
 
 ## Installation
 + Ensure that [CoffeeScript is installed][7].
@@ -17,7 +17,7 @@ Edit the `config.json` file in the `lib` directory according to the following ta
 | apiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
 | uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root) |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in **bytes** (remember to [adjust your web server accordingly][4]!) |
-| maxFileExpiration | *Integer* | 30 | The maximum time in **days** after which the files will be deleted from the server. **If *Dumpster* is stopped, currently uploaded files will not be deleted.** |
+| maxFileExpiration | *Integer* | 30 | The maximum time in **days** after which the files will be deleted from the server. |
 | maxFileExpirationEnabled | *Boolean* | true | Toggles if files will be forced to be deleted from the server after `maxFileExpiration` time or not. If disabled, files will remain stored until you (or another program) manually remove them from the uploads directory. |
 | debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
 
@@ -63,6 +63,9 @@ http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&del=3d&token=YUBIKEY
 | `MAX` | The given deletion date for the file was too large; it has been cut down to the [maximum allowed value](#configuration). |
 | `NONE` | No file deletion date has been given. The [default one](#configuration) has been applied. |
 
+### Note on persistence
+Since version *v3.0.0*, *Dumpster* will register and manage deletion dates in a local [LevelDB][10] instance (to be found in the `database` folder created upon starting the server). That way, if you stop the server and restart it at a later time, it will purge files with older deletion date than the current one and re-schedule future deletions.
+
 ### Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo.
 
@@ -77,3 +80,4 @@ Thanks to [Ricardo Tomasi][8] for the [cake-async][9] library used in the build 
 [7]: http://coffeescript.org/#installation
 [8]: https://github.com/ricardobeat
 [9]: https://github.com/ricardobeat/cake-async
+[10]: http://leveldb.org/
