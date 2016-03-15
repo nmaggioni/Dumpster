@@ -7,10 +7,10 @@ exports.parse = ->
   config = JSON.parse(fs.readFileSync('lib/config.json'))
 
   if config.skipAuth != true
-    if Object::toString.call(config.apiId) == '[object Array]'
-      if Object::toString.call(config.apiKey) == '[object Array]'
-        if config.apiId.length != config.apiKey.length
-          if config.apiId.length == 0 or config.apiKey.length == 0
+    if Object::toString.call(config.yubicoApiId) == '[object Array]'
+      if Object::toString.call(config.yubicoApiKey) == '[object Array]'
+        if config.yubicoApiId.length != config.yubicoApiKey.length
+          if config.yubicoApiId.length == 0 or config.yubicoApiKey.length == 0
             logger.error 'Configuration missing: have you edited the defaults in "lib/config.json"?'
           else
             logger.error 'Configuration mismatch: not the same number of API IDs and Keys.'
@@ -23,8 +23,8 @@ exports.parse = ->
       return false
 
   if config.skipAuth != true
-    yubikey.apiId = config.apiId
-    yubikey.apiKey = config.apiKey
+    yubikey.apiId = config.yubicoApiId
+    yubikey.apiKey = config.yubicoApiKey
   uploadPath = exports.uploadPath = config.uploadFolder or 'uploads/'
   exports.domainUrl = (config.domainName or 'http://localhost:9980/') + uploadPath
   exports.maxFileSize = config.maxFileSize or 52428800
