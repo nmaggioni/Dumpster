@@ -33,10 +33,14 @@ upload = multer(
     fields: 0
     fileSize: maxFileSize).single('file')
 
+router.all '/*', (req, res, next) ->
+  res.setHeader 'X-Powered-By', 'Dumpster'
+  next()
+
 router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
   upload req, res, (err) ->
     if err
-      res.writeHead 400, 'X-Powered-By': 'Dumpster'
+      res.status 400
       res.send 'Upload failed, file too big?\n'
     else
       next()
@@ -44,20 +48,22 @@ router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
 
 router.get '/uploads/*', (req, res) ->
   try
-    fs.accessSync __dirname + req.url, fs.F_OK
-    res.writeHead 200,
-      'X-Powered-By': 'Dumpster'
-      'Content-Type': 'application/force-download',
-      'Content-Disposition': 'attachment;'
-    res.sendFile __dirname + req.url
+    if fs.statSync(__dirname + req.url).isFile()
+      res.status 200
+      res.setHeader('Content-Type', 'application/force-download')
+      res.setHeader('Content-Disposition', 'attachment')
+      res.sendFile __dirname + req.url
+    else
+      res.status 404
+      res.end 'Nothing here.\n'
   catch error
     logger.error error
-    res.writeHead 404, 'X-Powered-By': 'Dumpster'
-    res.end 'Nothing here.'
+    res.status 404
+    res.end 'Nothing here.\n'
 
 router.all '/*', (req, res) ->
-  res.writeHead 404, 'X-Powered-By': 'Dumpster'
-  res.end 'Nothing here.'
+  res.status 404
+  res.end 'Nothing here.\n'
 
 app.use '/', router
 
