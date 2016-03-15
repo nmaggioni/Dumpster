@@ -48,7 +48,6 @@ router.get '/uploads/*', (req, res) ->
     res.writeHead 200,
       'X-Powered-By': 'Dumpster'
       'Content-Type': 'application/force-download',
-      'Access-Control-Allow-Origin': '*',
       'Content-Disposition': 'attachment;'
     res.sendFile __dirname + req.url
   catch error
