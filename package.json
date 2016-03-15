@@ -1,6 +1,6 @@
 {
   "name": "dumpster",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "description": "Self-hosted and API-based file upload server supporting YubiKey OTP authentication.",
   "main": "server.js",
   "dependencies": {
@@ -22,7 +22,11 @@
     "type": "git",
     "url": "git+https://github.com/nmaggioni/Dumpster.git"
   },
-  "author": "Niccolò Maggioni",
+  "author": {
+    "name": "Niccolò Maggioni",
+    "email": "nicco.maggioni@gmail.com",
+    "url": "https://nmaggioni.github.io/"
+  },
   "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/nmaggioni/Dumpster/issues"

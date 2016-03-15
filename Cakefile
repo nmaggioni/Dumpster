@@ -41,7 +41,7 @@ task 'build', 'Build project from ./src/*.coffee to ./*.js', ->
   invoke async 'build:dependencies'
   invoke async 'build:main'
   invoke async 'build:libraries'
-  async.end => console.log "All done! Run Dumpster with: 'node ./server.js'"
+  async.end => console.log "All done! Run Dumpster with: 'node ./server.js' or 'npm start'"
 
 task 'clean', 'Delete compiled files and generated folders (uploads and database included!).', ->
   files = ['server.js', 'lib/configParser.js', 'lib/logger.js', 'lib/validator.js', 'lib/database.js']

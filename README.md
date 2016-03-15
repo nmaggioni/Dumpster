@@ -1,4 +1,4 @@
-# Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/nmaggioni/dumpster/trend.png)](https://bitdeli.com/free "Bitdeli Badge") [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+# Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6]. Persistence layer implemented with [LevelDB][10].
 
 ## Installation
@@ -13,21 +13,22 @@ Edit the `config.json` file in the `lib` directory according to the following ta
 
 | Key | Type | Example / Default | Description |
 | --- | --- | --- | --- |
-| apiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
-| apiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
-| uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root) |
+| skipAuth | *Boolean* | true | Whether to skip authentication or not - **this will accept uploads by any user!** If set to true, you can safely leave Yubico's API fields empty. |
+| yubicoApiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
+| yubicoApiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
+| uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root). |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in **bytes** (remember to [adjust your web server accordingly][4]!) |
 | maxFileExpiration | *Integer* | 30 | The maximum time in **days** after which the files will be deleted from the server. |
-| maxFileExpirationEnabled | *Boolean* | true | Toggles if files will be forced to be deleted from the server after `maxFileExpiration` time or not. If disabled, files will remain stored until you (or another program) manually remove them from the uploads directory. |
-| debug | *Boolean* | false | Enables debug mode (YubiKey OTPs will **not** be verified!) |
+| maxFileExpirationEnabled | *Boolean* | true | Toggles if files will be forced to be deleted from the server after `maxFileExpiration` time or not. If disabled, files will remain stored until you (or another program like a *cron* job) manually remove them from the uploads directory. |
+| debug | *Boolean* | false | Enables debug mode (verbosity of the logs will be increased and YubiKey OTPs will **not** be verified). |
 
 ## Usage
-*Dumpster* is really easy to use, and mainly meant to be called from CLI. Refer to the following table for API parameters:
+*Dumpster* is easy to use, and mainly meant to be called from CLI. Refer to the following table for API parameters:
 
 | Parameter name | Required | Description |
 | --- | --- | --- |
 | **Base URL** | - | *Dumpster*'s root plus `/api/upload`. For example: `http://localhost:9980/api/upload` |
-| token | yes | Your YubiKey's OTP. |
+| token | yes | Your YubiKey's OTP. ***Required only if authentication is enabled.***|
 | md5 | no | MD5 checksum of the file that you're uploading; if given, *Dumpster* will check its copy of the file against it. Direct pipe from `md5sum` is supported. |
 | del | no | Time to file deletion; if given, the uploaded file will be deleted at the specified time/date. The allowed formats are (where `?` is a number): `??s` for seconds from now, `??m` for minutes from now, `??h` for hours from now, `??d` for days from now, `??D??M????Y` for a specified date (at midnight), and `??D??M????Y??h??m` for specified date and time. If the specified time exceeds the maximum setting, the maximum value will be used. |
 

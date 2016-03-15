@@ -1,6 +1,7 @@
 {
-    "apiId": [],
-    "apiKey": [""],
+    "skipAuth": true,
+    "yubicoApiId": [],
+    "yubicoApiKey": [""],
     "domainName": "",
     "uploadFolder": "uploads/",
     "maxFileSize": 52428800,
