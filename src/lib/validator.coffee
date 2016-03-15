@@ -143,6 +143,7 @@ exports.md5 = (req, res, next) ->
   next()
 
 exports.sendLink = (req, res) ->
+  res.writeHead 200, 'X-Powered-By': 'Dumpster'
   res.end domainUrl + path.basename(req.file.path) + '\n'
 
 # coffeelint: disable=unused_variables
