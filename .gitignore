@@ -1,5 +1,6 @@
 # Logs
 logs
+.logs
 *.log
 npm-debug.log*
 
@@ -47,10 +48,3 @@ uploads
 
 # LevelDB directory
 database
-
-# Compiled JS
-server.js
-lib/configParser.js
-lib/logger.js
-lib/validator.js
-lib/database.js

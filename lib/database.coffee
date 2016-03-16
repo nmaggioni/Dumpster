@@ -1,5 +1,5 @@
-logger = require './logger.js'
-configParser = require './configParser.js'
+logger = require './logger'
+configParser = require './configParser'
 schedule = require 'node-schedule'
 path = require 'path'
 fs = require 'fs'

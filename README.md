@@ -1,15 +1,14 @@
 # Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
-A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6]. Persistence layer implemented with [LevelDB][10].
+>A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6]. Persistence layer implemented with [LevelDB][10].
 
 ## Installation
-+ Ensure that [CoffeeScript is installed][7].
-+ Clone the repo or download the compiled release.
-+ Navigate to the cloned/decompressed directory and issue `cake build` if you cloned the repo, `npm install` if you downloaded the compiled archive.
++ Clone the repo.
++ Navigate to the cloned directory and issue `npm install`.
 + Edit the configuration file (see the [Configuration](#configuration) section).
-+ Enjoy *Dumpster* with `npm start` or `node ./server.js`!
++ Enjoy *Dumpster* with `npm start`!
 
 ## Configuration
-Edit the `config.json` file in the `lib` directory according to the following table.
+Edit the `config.json` file in the `config` directory according to the following table.
 
 | Key | Type | Example / Default | Description |
 | --- | --- | --- | --- |
@@ -31,6 +30,7 @@ Edit the `config.json` file in the `lib` directory according to the following ta
 | token | yes | Your YubiKey's OTP. ***Required only if authentication is enabled.***|
 | md5 | no | MD5 checksum of the file that you're uploading; if given, *Dumpster* will check its copy of the file against it. Direct pipe from `md5sum` is supported. |
 | del | no | Time to file deletion; if given, the uploaded file will be deleted at the specified time/date. The allowed formats are (where `?` is a number): `??s` for seconds from now, `??m` for minutes from now, `??h` for hours from now, `??d` for days from now, `??D??M????Y` for a specified date (at midnight), and `??D??M????Y??h??m` for specified date and time. If the specified time exceeds the maximum setting, the maximum value will be used. |
+| json | no | If present, makes Dumpster return a JSON object instead of plain text, where the key _downloadUrl_ will have the download link as value. |
 
 > The order of the parameters is irrelevant. Placing the token as the last one may however be advisable: that way the YubiKey itself will send the command by issuing the newline.
 
@@ -70,15 +70,10 @@ Since version *v3.0.0*, *Dumpster* will register and manage deletion dates in a 
 ### Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo.
 
-Thanks to [Ricardo Tomasi][8] for the [cake-async][9] library used in the build script.
-
 [1]: https://github.com/evilpacket/node-yubikey
 [2]: https://github.com/evilpacket
 [3]: https://github.com/jkbrzt/httpie
 [4]: http://nginx.org/en/docs/http/ngx_http_core_module.html#client_max_body_size
 [5]: https://nodejs.org/en/
 [6]: http://coffeescript.org/
-[7]: http://coffeescript.org/#installation
-[8]: https://github.com/ricardobeat
-[9]: https://github.com/ricardobeat/cake-async
 [10]: http://leveldb.org/

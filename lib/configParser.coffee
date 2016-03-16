@@ -1,10 +1,10 @@
-logger = require('./logger.js')
+logger = require('./logger')
 yubikey = require('./yubikey.js')
 fs = require('fs')
 parsed = exports.parsed = false
 
 exports.parse = ->
-  config = JSON.parse(fs.readFileSync('lib/config.json'))
+  config = JSON.parse(fs.readFileSync __dirname + '/../config/config.json')
 
   if config.skipAuth != true
     if Object::toString.call(config.yubicoApiId) == '[object Array]'
