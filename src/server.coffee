@@ -2,6 +2,7 @@ fs = require 'fs'
 multer = require 'multer'
 bodyParser = require 'body-parser'
 express = require 'express'
+cors = require 'cors'
 app = express()
 router = express.Router()
 logger = require './lib/logger'
@@ -30,7 +31,6 @@ storage = multer.diskStorage(
 upload = multer(
   storage: storage
   limits:
-    fields: 0
     fileSize: maxFileSize).single('file')
 
 router.all '/*', (req, res, next) ->
@@ -40,6 +40,7 @@ router.all '/*', (req, res, next) ->
 router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
   upload req, res, (err) ->
     if err
+      logger.error err
       res.status 400
       res.send 'Upload failed, file too big?\n'
     else
@@ -65,6 +66,7 @@ router.all '/*', (req, res) ->
   res.status 404
   res.end 'Nothing here.\n'
 
+app.use cors()
 app.use '/', router
 
 app.listen 9980, ->

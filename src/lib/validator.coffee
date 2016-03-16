@@ -144,7 +144,11 @@ exports.md5 = (req, res, next) ->
 
 exports.sendLink = (req, res) ->
   res.status 200
-  res.end domainUrl + path.basename(req.file.path) + '\n'
+  if req.query.json?
+    res.json downloadUrl: domainUrl + path.basename(req.file.path)
+    res.end()
+  else
+    res.end domainUrl + path.basename(req.file.path) + '\n'
 
 # coffeelint: disable=unused_variables
 missingUploadsDirectory = ->
