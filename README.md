@@ -1,5 +1,11 @@
 # Dumpster [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
->A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6]. Persistence layer implemented with [LevelDB][10].
+> A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication. Written in [*NodeJS*][5] and [*CoffeeScript*][6], persistence layer implemented with [LevelDB][10] and page rendering done with [Jade][11].
+
+# Table of contents
++ [Installation](#installation)
++ [Configuration](#configuration)
++ [Usage](#usage)
++ [Notes & Credits](#note-on-persistence)
 
 ## Installation
 + Clone the repo.
@@ -17,6 +23,8 @@ Edit the `config.json` file in the `config` directory according to the following
 | skipAuth | *Boolean* | true | Whether to skip authentication or not - **this will accept uploads by any user!** If set to true, you can safely leave Yubico's API fields empty. |
 | yubicoApiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
 | yubicoApiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
+| domainName | *String* | http://localhost:9980/ | Base URL of the Dumpster installation **with trailing slash**. |
+| enableWebUI | *Boolean* | true | Whether to enable or not the WebUI, reachable on the root path. |
 | uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root). |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in **bytes** (remember to [adjust your web server accordingly][4]!) |
 | maxFileExpiration | *Integer* | 30 | The maximum time in **days** after which the files will be deleted from the server. |
@@ -79,3 +87,4 @@ The included YubiKey library is a modified version of [the one][1] in [Adam Bald
 [5]: https://nodejs.org/en/
 [6]: http://coffeescript.org/
 [10]: http://leveldb.org/
+[11]: http://jade-lang.com/
