@@ -1,4 +1,5 @@
 fs = require 'fs'
+path = require 'path'
 multer = require 'multer'
 bodyParser = require 'body-parser'
 express = require 'express'
@@ -37,6 +38,10 @@ router.all '/*', (req, res, next) ->
   res.setHeader 'X-Powered-By', 'Dumpster'
   next()
 
+if configParser.enableWebUI
+  router.get '/', (req, res) ->
+    res.render 'index', { title: 'Dumpster WebUI' }
+
 router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
   upload req, res, (err) ->
     if err
@@ -66,7 +71,11 @@ router.all '/*', (req, res) ->
   res.status 404
   res.end 'Nothing here.\n'
 
+app.set 'views', path.join(__dirname, 'views')
+app.set 'view engine', 'jade'
+
 app.use cors()
+app.use express.static(path.join(__dirname, 'public'))
 app.use '/', router
 
 app.listen 9980, ->

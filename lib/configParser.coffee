@@ -26,19 +26,22 @@ exports.parse = ->
     yubikey.apiId = config.yubicoApiId
     yubikey.apiKey = config.yubicoApiKey
   uploadPath = exports.uploadPath = config.uploadFolder or 'uploads/'
+  exports.enableWebUI = config.enableWebUI
   exports.domainUrl = (config.domainName or 'http://localhost:9980/') + uploadPath
   exports.maxFileSize = config.maxFileSize or 52428800
   exports.maxFileExpiration = config.maxFileExpiration or 30
   exports.maxFileExpirationEnabled = config.maxFileExpirationEnabled
+  exports.debug = config.debug
+  exports.skipAuth = config.skipAuth
 
   if exports.maxFileExpirationEnabled == undefined
     exports.maxFileExpirationEnabled = true
-  exports.debug = config.debug
   if exports.debug == undefined
     exports.debug = false
-  exports.skipAuth = config.skipAuth
   if exports.skipAuth == undefined
     exports.skipAuth = false
+  if exports.enableWebUI == undefined
+    exports.enableWebUI = true
 
   parsed = true
   parsed

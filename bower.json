@@ -1,0 +1,14 @@
+{
+  "name": "dumpster-webui",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "bootstrap-fileinput": "^4.3.1",
+    "jquery": "^2.2.1"
+  }
+}

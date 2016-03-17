@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  h1(align="center").title= title
+
+  .col-md-12
+    .col-md-6
+      label.control-label YubiKey Token
+      input#token.form-control(type="text" style="width: 100%;")
+    .col-md-6#upload-div
+      label.control-label Select File
+      input#upload.file-loading(name='file', type='file')
+
+  //- http://plugins.krajee.com/file-input#ajax-uploads
+  script.
+    $(document).on('ready', function() {
+      $("#upload").fileinput({
+        'maxFileCount': 1,
+        'dropZoneEnabled': false,
+        'uploadUrl': 'TBD'
+      }).fileinput('disable');
+
+      $('#upload').on('fileuploaded', function(event, data, previewId, index) {
+        var response = data.response;
+        $('#upload-div').html(createAlert("success", response.downloadUrl));
+      });
+
+      $('#token').on('input', function() {
+        if($('#token').val().length > 0) {
+          $('#upload')
+            .fileinput('refresh', {
+              'dropZoneEnabled': true,
+              'uploadUrl': window.location.href + 'api/upload?json=1&token=' + $('#token').val()
+              })
+            .fileinput('enable');
+        } else {
+          $('#upload')
+            .fileinput('clear')
+            .fileinput('refresh', { 'dropZoneEnabled': false })
+            .fileinput('disable');
+        }
+      });
+
+      function createAlert(mode, url) {
+        var notif = '<div class="alert alert-success alert-dismissable> <i class="fa fa-check-square"></i><strong>Success</strong>' +
+          '<hr class="message-inner-separator">' +
+            '<a href="' + url + '">' + escapeHTMLEntities(url) + '</a>' +
+          '</div>';
+
+        return notif;
+      }
+
+      function escapeHTMLEntities(str) {
+        return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+          return '&#' + i.charCodeAt(0) + ';';
+        });
+      }
+    });

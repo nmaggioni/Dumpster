@@ -48,3 +48,6 @@ uploads
 
 # LevelDB directory
 database
+
+# Bower components
+public/components

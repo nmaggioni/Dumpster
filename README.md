@@ -3,7 +3,9 @@
 
 ## Installation
 + Clone the repo.
-+ Navigate to the cloned directory and issue `npm install`.
++ Navigate to the cloned directory and issue:
+  - `npm install`
+  - `npm run-script bower`
 + Edit the configuration file (see the [Configuration](#configuration) section).
 + Enjoy *Dumpster* with `npm start`!
 
