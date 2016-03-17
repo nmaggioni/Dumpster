@@ -1,58 +1,81 @@
 extends layout
 
 block content
-  h1(align="center").title= title
+  header#top.header
+    .header-overlay.text-vertical-center
+      include ./github_ribbon
+      h1 Dumpster
+      h3 A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication.
+      br
+      if !skipAuth
+        .col-md-6.col-md-offset-3#token-div
+          input#token.form-control(type="text" placeholder="YubiKey Token")
+      .col-md-6.col-md-offset-3#upload-div
+        input#upload.file-loading(name='file', type='file')
 
-  .col-md-12
-    .col-md-6
-      label.control-label YubiKey Token
-      input#token.form-control(type="text" style="width: 100%;")
-    .col-md-6#upload-div
-      label.control-label Select File
-      input#upload.file-loading(name='file', type='file')
+      //- http://plugins.krajee.com/file-input#ajax-uploads
+      script.
+        skipAuth = #{skipAuth}
+        $(document).on('ready', function() {
+          $("#upload").fileinput({
+            'maxFileCount': 1,
+            'uploadUrl': window.location.href + 'api/upload?json=1'
+          });
+          if (!skipAuth) {
+            $('#upload')
+              .fileinput('refresh', { 'dropZoneEnabled': false })
+              .fileinput('disable');
+          }
 
-  //- http://plugins.krajee.com/file-input#ajax-uploads
-  script.
-    $(document).on('ready', function() {
-      $("#upload").fileinput({
-        'maxFileCount': 1,
-        'dropZoneEnabled': false,
-        'uploadUrl': 'TBD'
-      }).fileinput('disable');
+          $('#upload').on('fileuploaded', function(event, data, previewId, index) {
+            var response = data.response;
+            $('#upload-div').html(createAlert(response.downloadUrl));
+          });
 
-      $('#upload').on('fileuploaded', function(event, data, previewId, index) {
-        var response = data.response;
-        $('#upload-div').html(createAlert("success", response.downloadUrl));
-      });
+          if (!skipAuth) {
+            $('#token').on('input', function() {
+              if($('#token').val().length > 0) {
+                $('#upload')
+                  .fileinput('refresh', {
+                    'dropZoneEnabled': true,
+                    'uploadUrl': window.location.href + 'api/upload?json=1&token=' + $('#token').val()
+                    })
+                  .fileinput('enable');
+              } else {
+                $('#upload')
+                  .fileinput('clear')
+                  .fileinput('refresh', { 'dropZoneEnabled': false })
+                  .fileinput('disable');
+              }
+            });
 
-      $('#token').on('input', function() {
-        if($('#token').val().length > 0) {
-          $('#upload')
-            .fileinput('refresh', {
-              'dropZoneEnabled': true,
-              'uploadUrl': window.location.href + 'api/upload?json=1&token=' + $('#token').val()
-              })
-            .fileinput('enable');
-        } else {
-          $('#upload')
-            .fileinput('clear')
-            .fileinput('refresh', { 'dropZoneEnabled': false })
-            .fileinput('disable');
-        }
-      });
+            superplaceholder({
+              el: document.querySelector('input[id=token]'),
+              sentences: [ 'Insert your YubiKey and press its golden button' ],
+              options: {
+                letterDelay: 75,
+                sentenceDelay: 3000,
+                startOnFocus: true,
+                loop: true,
+                showCursor: true,
+                cursor: '|'
+              }
+            });
+          }
 
-      function createAlert(mode, url) {
-        var notif = '<div class="alert alert-success alert-dismissable> <i class="fa fa-check-square"></i><strong>Success</strong>' +
-          '<hr class="message-inner-separator">' +
-            '<a href="' + url + '">' + escapeHTMLEntities(url) + '</a>' +
-          '</div>';
+          function createAlert(url) {
+            var notif = '<div class="alert alert-success alert-dismissable> <i class="fa fa-check-square"></i>' +
+              '<strong>Success! Here\'s your download link.</strong>' +
+              '<hr class="message-inner-separator">' +
+                '<a href="' + url + '">' + escapeHTMLEntities(url) + '</a>' +
+              '</div>';
 
-        return notif;
-      }
+            return notif;
+          }
 
-      function escapeHTMLEntities(str) {
-        return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-          return '&#' + i.charCodeAt(0) + ';';
+          function escapeHTMLEntities(str) {
+            return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+              return '&#' + i.charCodeAt(0) + ';';
+            });
+          }
         });
-      }
-    });

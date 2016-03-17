@@ -16,6 +16,7 @@ if !configParser.parsed
     process.exit 1
 uploadPath = configParser.uploadPath
 maxFileSize = configParser.maxFileSize
+skipAuth = configParser.skipAuth
 debug = configParser.debug
 
 app.use bodyParser.json()
@@ -40,7 +41,9 @@ router.all '/*', (req, res, next) ->
 
 if configParser.enableWebUI
   router.get '/', (req, res) ->
-    res.render 'index', { title: 'Dumpster WebUI' }
+    res.render 'index',
+      title: 'Dumpster WebUI'
+      skipAuth: skipAuth
 
 router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
   upload req, res, (err) ->
