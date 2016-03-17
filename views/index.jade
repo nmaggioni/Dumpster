@@ -7,11 +7,12 @@ block content
       h1 Dumpster
       h3 A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication.
       br
-      if !skipAuth
-        .col-md-6.col-md-offset-3#token-div
-          input#token.form-control(type="text" placeholder="YubiKey Token")
-      .col-md-6.col-md-offset-3#upload-div
-        input#upload.file-loading(name='file', type='file')
+      .col-md-6.col-md-offset-3#alert-div
+        if !skipAuth
+          #token-div
+            input#token.form-control(type="text" placeholder="YubiKey Token")
+        #upload-div
+          input#upload.file-loading(name='file', type='file')
 
       //- http://plugins.krajee.com/file-input#ajax-uploads
       script.
@@ -29,7 +30,7 @@ block content
 
           $('#upload').on('fileuploaded', function(event, data, previewId, index) {
             var response = data.response;
-            $('#upload-div').html(createAlert(response.downloadUrl));
+            $('#alert-div').html(createAlert(response.downloadUrl));
           });
 
           if (!skipAuth) {
