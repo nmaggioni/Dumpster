@@ -3,6 +3,7 @@
     "yubicoApiId": [],
     "yubicoApiKey": [""],
     "domainName": "",
+    "port": 9980,
     "enableWebUI": true,
     "uploadFolder": "uploads/",
     "maxFileSize": 52428800,

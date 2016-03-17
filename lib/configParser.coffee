@@ -30,6 +30,7 @@ exports.parse = ->
   exports.domainUrl = (config.domainName or 'http://localhost:9980/') + uploadPath
   exports.maxFileSize = config.maxFileSize or 52428800
   exports.maxFileExpiration = config.maxFileExpiration or 30
+  exports.port = config.port or 9980
   exports.maxFileExpirationEnabled = config.maxFileExpirationEnabled
   exports.debug = config.debug
   exports.skipAuth = config.skipAuth

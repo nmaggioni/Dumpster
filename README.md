@@ -26,6 +26,7 @@ Edit the `config.json` file in the `config` directory according to the following
 | yubicoApiId | *Integer* array| [123456, 654321] | Yubico API IDs - get one at: https://upgrade.yubico.com/getapikey/ |
 | yubicoApiKey | *String* array | ["abcdef", "fedcba"] | Yubico API Keys - get one at: https://upgrade.yubico.com/getapikey/ |
 | domainName | *String* | http://localhost:9980/ | Base URL of the Dumpster installation **with trailing slash**. |
+| port | *Integer* | 9980 | The port that Dumpster will be listening on. |
 | enableWebUI | *Boolean* | true | Whether to enable or not the WebUI, reachable on the root path. |
 | uploadFolder | *String* | "uploads/" | The folder where the uploaded files will be placed (relative to Dumpster's root). |
 | maxFileSize | *Integer* | 52428800 | The maximum upload dimension in **bytes** (remember to [adjust your web server accordingly][4]!) |
