@@ -5,6 +5,8 @@
 + [Installation](#installation)
 + [Configuration](#configuration)
 + [Usage](#usage)
+  + [CLI](#cli)
+  + [WebUI](#webui)
 + [Notes & Credits](#note-on-persistence)
 
 ## Installation
@@ -32,6 +34,7 @@ Edit the `config.json` file in the `config` directory according to the following
 | debug | *Boolean* | false | Enables debug mode (verbosity of the logs will be increased and YubiKey OTPs will **not** be verified). |
 
 ## Usage
+### CLI
 *Dumpster* is easy to use, and mainly meant to be called from CLI. Refer to the following table for API parameters:
 
 | Parameter name | Required | Description |
@@ -74,10 +77,13 @@ http -f POST "http://localhost:9980/api/upload?md5=CHECKSUM&del=3d&token=YUBIKEY
 | `MAX` | The given deletion date for the file was too large; it has been cut down to the [maximum allowed value](#configuration). |
 | `NONE` | No file deletion date has been given. The [default one](#configuration) has been applied. |
 
-### Note on persistence
+### WebUI
+If enabled in the [configuration](#configuration) with the `enableWebUI` option, a simple graphical web interface will be available on the root path. It will follow the `skipAuth` setting, requesting an OTP token only if needed. A drag-and-drop upload widget is available, and uploads are performed via AJAX requests.
+
+## Note on persistence
 Since version *v3.0.0*, *Dumpster* will register and manage deletion dates in a local [LevelDB][10] instance (to be found in the `database` folder created upon starting the server). That way, if you stop the server and restart it at a later time, it will purge files with older deletion date than the current one and re-schedule future deletions.
 
-### Credits
+## Credits
 The included YubiKey library is a modified version of [the one][1] in [Adam Baldwin (evilpacket)'s][2] repo.
 
 [1]: https://github.com/evilpacket/node-yubikey
