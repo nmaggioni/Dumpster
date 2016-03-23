@@ -3,10 +3,11 @@
 
 # Table of contents
 + [Installation](#installation)
+  - [Docker image](#docker-image)
 + [Configuration](#configuration)
 + [Usage](#usage)
-  + [CLI](#cli)
-  + [WebUI](#webui)
+  - [CLI](#cli)
+  - [WebUI](#webui)
 + [Notes & Credits](#note-on-persistence)
 
 ## Installation
@@ -16,6 +17,9 @@
   - `npm run-script bower`
 + Edit the configuration file (see the [Configuration](#configuration) section).
 + Enjoy *Dumpster* with `npm start`!
+
+### Docker image
+If you prefer running Dumpster in a container, a [Dockerfile](Dockerfile) is available to build an image.
 
 ## Configuration
 Edit the `config.json` file in the `config` directory according to the following table.
