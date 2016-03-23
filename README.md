@@ -20,6 +20,7 @@
 
 ### Docker image
 If you prefer running Dumpster in a container, a [Dockerfile](Dockerfile) is available to build an image.
+An automated build can also be found [in the Docker Hub][12].
 
 ## Configuration
 Edit the `config.json` file in the `config` directory according to the following table.
@@ -99,3 +100,4 @@ The included YubiKey library is a modified version of [the one][1] in [Adam Bald
 [6]: http://coffeescript.org/
 [10]: http://leveldb.org/
 [11]: http://jade-lang.com/
+[12]: https://hub.docker.com/r/nmaggioni/dumpster/
