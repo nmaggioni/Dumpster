@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://nmaggioni.github.io/dumpster/dumpster_logo.png" alt="Dumpster"/>
+  <img src="https://nmaggioni.github.io/dumpster/dumpster_logo_small.png" alt="Dumpster"/>
 </p>
 
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
