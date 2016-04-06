@@ -2,7 +2,7 @@
   <img src="https://nmaggioni.github.io/dumpster/dumpster_logo_small.png" alt="Dumpster"/>
 </p>
 
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster) [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/29b49730fea944feb66f85f73f4c858f)](https://www.codacy.com/app/nmaggioni/Dumpster)  [![Dependency Status](https://david-dm.org/nmaggioni/dumpster.svg)](https://david-dm.org/nmaggioni/dumpster) [![StackShare](http://img.shields.io/badge/tech-stack-0690fa.svg?style=flat)](http://stackshare.io/nmaggioni/dumpster) 
 > A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication.<br> Written in [*NodeJS*][5] and [*CoffeeScript*][6], persistence layer implemented with [LevelDB][7] and page rendering done with [Jade][8].
 
 # Table of contents
