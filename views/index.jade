@@ -13,6 +13,15 @@ block content
             input#token.form-control(type="text" placeholder="YubiKey Token")
         #upload-div
           input#upload.file-loading(name='file', type='file')
+        #expiration-div.col-md-3
+          select#expiration.selectpicker.show-tick.show-menu-arrow(title="Expiration date")
+            option(value="10m") 10 Minutes
+            option(value="1h") 1 Hour
+            option(value="1d") 1 Day
+            option(value="3d") 3 Days
+            option(value="7d", data-subtext="7 days") 1 Week
+            option(value="14d", data-subtext="14 days") 2 Week
+            option(value="30d", data-subtext="30 days") 1 Month
 
       //- http://plugins.krajee.com/file-input#ajax-uploads
       script.
@@ -20,7 +29,7 @@ block content
         $(document).on('ready', function() {
           $("#upload").fileinput({
             'maxFileCount': 1,
-            'uploadUrl': window.location.href + 'api/upload?json=1'
+            'uploadUrl': window.location.origin + '/api/upload?json=1'
           });
           if (!skipAuth) {
             $('#upload')
@@ -39,7 +48,7 @@ block content
                 $('#upload')
                   .fileinput('refresh', {
                     'dropZoneEnabled': true,
-                    'uploadUrl': window.location.href + 'api/upload?json=1&token=' + $('#token').val()
+                    'uploadUrl': window.location.origin + '/api/upload?json=1&token=' + $('#token').val() + '&del=' + getExpiration()
                     })
                   .fileinput('enable');
               } else {
@@ -64,6 +73,19 @@ block content
             });
           }
 
+          $('#expiration').on('change', function() {
+            var uploadUrl;
+            if (skipAuth) {
+              uploadUrl = window.location.origin + '/api/upload?json=1&del=' + $('#expiration').val();
+            } else {
+              uploadUrl = window.location.origin + '/api/upload?json=1&token=' + $('#token').val() + '&del=' + getExpiration();
+            }
+            $('#upload')
+              .fileinput('refresh', {
+                'uploadUrl': uploadUrl
+              });
+          });
+
           function createAlert(url) {
             var notif = '<div class="alert alert-success alert-dismissable> <i class="fa fa-check-square"></i>' +
               '<strong>Success! Here\'s your download link.</strong>' +
@@ -78,5 +100,15 @@ block content
             return str.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
               return '&#' + i.charCodeAt(0) + ';';
             });
+          }
+
+          function getExpiration() {
+            var expiration = document.getElementById('expiration');
+            var selectedIndex = expiration.selectedIndex;
+            if (selectedIndex == 0) {
+              return "30d";
+            } else {
+              return expiration.options[selectedIndex].value;
+            }
           }
         });
