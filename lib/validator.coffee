@@ -127,7 +127,7 @@ exports.md5 = (req, res, next) ->
     if md5query.indexOf(' ') != -1
       md5query = md5query.substr(0, md5query.indexOf(' '))
       # allows piping from md5sum
-    md5uploaded = md5File(req.file.path).toString()
+    md5uploaded = md5File.sync(req.file.path)
     if md5uploaded == md5query
       logger.info 'File \'' + req.file.originalname + '\' uploaded to \'' + req.file.path + '\', MD5 OK'
       res.header 'Dumpster-Checksum', 'OK'
