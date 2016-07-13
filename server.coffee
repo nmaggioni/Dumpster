@@ -20,8 +20,8 @@ maxFileSize = configParser.maxFileSize
 skipAuth = configParser.skipAuth
 debug = configParser.debug
 
+app.use bodyParser.urlencoded(extended: true, limit: maxFileSize)
 app.use bodyParser.json()
-app.use bodyParser.urlencoded(extended: true)
 
 storage = multer.diskStorage(
   destination: (req, file, cb) ->
