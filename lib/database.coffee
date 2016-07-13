@@ -48,11 +48,11 @@ importScheduledDates = (data) ->
     if now > deletionDateCompare
       if debug
         logger.warning 'Deletion job for file "' + path.basename(filePath) + '" is outdated, deleting it now.'
-      fs.unlinkSync filePath
+      fs.unlinkSync filePath if fs.existsSync filePath
       del filePath
     else
       schedule.scheduleJob deletionDate, ((filePath) ->
-        fs.unlinkSync filePath
+        fs.unlinkSync filePath if fs.existsSync filePath
         logger.info 'Deleted file: ' + path.basename(filePath)
         del filePath
       ).bind(null, filePath)
