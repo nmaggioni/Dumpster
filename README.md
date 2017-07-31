@@ -26,6 +26,8 @@
 If you prefer running Dumpster in a container, a [Dockerfile](Dockerfile) is available to build an image.
 An automated build can also be found [in the Docker Hub][9]: you can pull it with `docker pull nmaggioni/dumpster`.
 
+A simple and **not production-ready** [docker-compose](docker-compose.yml) file is available as well, along with a [rancher-compose](rancher-compose.yml) for deploying on [Rancher](http://rancher.com/).
+
 ## Configuration
 Edit the `config.json` file in the `config` directory to configure Dumpster. Be sure to check [the related Wiki page][3] for a thoroughly explanation of all the options!
 

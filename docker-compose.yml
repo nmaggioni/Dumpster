@@ -1,0 +1,9 @@
+version: '2'
+services:
+  dumpster:
+    image: nmaggioni/dumpster
+    volumes:
+      - /path/to/file/config.json:/usr/src/app/config/config.json
+      - /path/to/folder/uploads:/usr/src/app/uploads
+    ports:
+      - 9980:9980/tcp
