@@ -47,6 +47,7 @@ if configParser.enableWebUI
       skipAuth: skipAuth
 
 router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
+  req.socket.setTimeout 60 * 60 * 1000  # 1h
   upload req, res, (err) ->
     if err
       logger.error err
