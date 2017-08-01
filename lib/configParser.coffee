@@ -27,7 +27,7 @@ exports.parse = ->
     yubikey.apiKey = config.yubicoApiKey
   uploadPath = exports.uploadPath = config.uploadFolder or 'uploads/'
   exports.enableWebUI = config.enableWebUI
-  exports.domainUrl = (config.domainName or 'http://localhost:9980/') + uploadPath
+  exports.domainUrl = (config.baseUrl or 'http://localhost:9980/') + uploadPath
   exports.maxFileSize = config.maxFileSize or 52428800
   exports.maxFileExpiration = config.maxFileExpiration or 30
   exports.port = config.port or 9980

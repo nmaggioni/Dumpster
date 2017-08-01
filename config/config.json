@@ -2,7 +2,7 @@
     "skipAuth": true,
     "yubicoApiId": [],
     "yubicoApiKey": [""],
-    "domainName": "",
+    "baseUrl": "http://localhost:9980/",
     "port": 9980,
     "enableWebUI": true,
     "uploadFolder": "uploads/",
