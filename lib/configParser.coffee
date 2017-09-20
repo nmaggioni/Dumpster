@@ -9,11 +9,16 @@ exports.parse = ->
   if config.skipAuth != true
     if Object::toString.call(config.yubicoApiId) == '[object Array]'
       if Object::toString.call(config.yubicoApiKey) == '[object Array]'
-        if config.yubicoApiId.length != config.yubicoApiKey.length
-          if config.yubicoApiId.length == 0 or config.yubicoApiKey.length == 0
-            logger.error 'Configuration missing: have you edited the defaults in "lib/config.json"?'
+        if Object::toString.call(config.altPasswords) == '[object Array]'
+          if config.yubicoApiId.length == config.yubicoApiKey.length
+            if (config.yubicoApiId.length == 0 or config.yubicoApiKey.length == 0) and (config.altPasswords.length == 0)
+              logger.error 'Configuration missing: have you edited the defaults in "lib/config.json"?'
+              return false
           else
             logger.error 'Configuration mismatch: not the same number of API IDs and Keys.'
+            return false
+        else
+          logger.error 'Configuration mismatch: Alternative Passwords field is not an array.'
           return false
       else
         logger.error 'Configuration mismatch: API Keys field is not an array.'
@@ -25,6 +30,7 @@ exports.parse = ->
   if config.skipAuth != true
     yubikey.apiId = config.yubicoApiId
     yubikey.apiKey = config.yubicoApiKey
+  exports.altPasswords = config.altPasswords
   uploadPath = exports.uploadPath = config.uploadFolder or 'uploads/'
   exports.enableWebUI = config.enableWebUI
   exports.domainUrl = (config.baseUrl or 'http://localhost:9980/') + uploadPath

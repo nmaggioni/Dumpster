@@ -19,6 +19,7 @@ maxFileExpirationEnabled = configParser.maxFileExpirationEnabled
 domainUrl = configParser.domainUrl
 debug = configParser.debug
 skipAuth = configParser.skipAuth
+altPasswords = configParser.altPasswords
 
 exports.auth = (req, res, next) ->
   if debug or skipAuth
@@ -26,13 +27,17 @@ exports.auth = (req, res, next) ->
     next()
     return
   token = req.query.token
-  yubikey.verify token, (isValid, status) ->
-    if isValid
-      logger.info 'Valid token received.'
+  if token in altPasswords
+      logger.info 'Valid alternative password received.'
       next()
-    else
-      logger.warning 'Invalid token received! Reason: ' + status
-      res.status(401).send 'AUTH ERROR - ' + status + '\n'
+  else
+      yubikey.verify token, (isValid, status) ->
+        if isValid
+          logger.info 'Valid token received.'
+          next()
+        else
+          logger.warning 'Invalid token received! Reason: ' + status
+          res.status(401).send 'AUTH ERROR - ' + status + '\n'
 
 dateOk = undefined
 deletionDate = undefined

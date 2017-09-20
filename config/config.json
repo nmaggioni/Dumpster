@@ -1,7 +1,8 @@
 {
     "skipAuth": true,
     "yubicoApiId": [],
-    "yubicoApiKey": [""],
+    "yubicoApiKey": [],
+    "altPasswords": [],
     "baseUrl": "http://localhost:9980/",
     "port": 9980,
     "enableWebUI": true,

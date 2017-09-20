@@ -15,6 +15,7 @@ if !configParser.parsed
   if !configParser.parse()
     process.exit 1
 port = configParser.port
+baseUrl = configParser.domainUrl
 uploadPath = configParser.uploadPath
 maxFileSize = configParser.maxFileSize
 skipAuth = configParser.skipAuth
@@ -84,7 +85,7 @@ app.use express.static(path.join(__dirname, 'public'))
 app.use '/', router
 
 app.listen port, ->
-  logger.info 'Starting Dumpster on port ' + port + '.'
+  logger.info 'Starting Dumpster on port ' + port + '. (' + baseUrl.replace(uploadPath, '') + ')'
   if debug
     logger.warning 'Debug mode is enabled!'
   validator.checkUploadsDirectory()
