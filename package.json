@@ -4,19 +4,19 @@
   "description": "Self-hosted and API-based file upload server supporting YubiKey OTP authentication.",
   "main": "server.js",
   "dependencies": {
-    "body-parser": "^1.15.2",
-    "bower": "^1.7.9",
+    "body-parser": "^1.18.1",
+    "bower": "^1.8.2",
     "coffee-script": "^1.10.0",
     "cors": "^2.7.1",
-    "express": "^4.14.0",
+    "express": "^4.15.4",
     "jade": "^1.11.0",
     "level": "^1.4.0",
-    "md5-file": "^3.1.1",
+    "md5-file": "^3.2.2",
     "moment": "^2.14.1",
     "multer": "^1.1.0",
-    "node-schedule": "^1.1.1",
-    "winston": "^2.2.0",
-    "snyk": "^1.19.1"
+    "node-schedule": "^1.2.5",
+    "snyk": "^1.19.1",
+    "winston": "^2.2.0"
   },
   "devDependencies": {},
   "scripts": {
