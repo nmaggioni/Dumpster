@@ -27,12 +27,15 @@ block content
       script.
         skipAuth = #{skipAuth}
         $(document).on('ready', function() {
-          $("#upload").fileinput({
-            'maxFileCount': 1,
-            'uploadUrl': window.location.origin + '/api/upload?json=1'
-          });
+          $("#upload")
+            .fileinput('clear')
+            .fileinput({
+              'maxFileCount': 1,
+              'uploadUrl': window.location.origin + '/api/upload?json=1'
+            });
           if (!skipAuth) {
             $('#upload')
+              .fileinput('clear')
               .fileinput('refresh', { 'dropZoneEnabled': false })
               .fileinput('disable');
           }
@@ -46,6 +49,7 @@ block content
             $('#token').on('input', function() {
               if($('#token').val().length > 0) {
                 $('#upload')
+                  .fileinput('clear')
                   .fileinput('refresh', {
                     'dropZoneEnabled': true,
                     'uploadUrl': window.location.origin + '/api/upload?json=1&token=' + $('#token').val() + '&del=' + getExpiration()
@@ -81,6 +85,7 @@ block content
               uploadUrl = window.location.origin + '/api/upload?json=1&token=' + $('#token').val() + '&del=' + getExpiration();
             }
             $('#upload')
+              .fileinput('clear')
               .fileinput('refresh', {
                 'uploadUrl': uploadUrl
               });
