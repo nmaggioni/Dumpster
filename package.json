@@ -9,12 +9,12 @@
     "coffee-script": "^1.10.0",
     "cors": "^2.7.1",
     "express": "^4.15.4",
-    "jade": "^1.11.0",
     "level": "^1.4.0",
     "md5-file": "^3.2.2",
     "moment": "^2.14.1",
     "multer": "^1.1.0",
     "node-schedule": "^1.2.5",
+    "pug": "^2.0.0-rc.4",
     "snyk": "^1.19.1",
     "winston": "^2.2.0"
   },
