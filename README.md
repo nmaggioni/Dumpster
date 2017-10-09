@@ -16,7 +16,7 @@
 
 ## Installation
 + Clone the repo.
-+ Navigate to the cloned directory and issue:
++ Navigate to the cloned directory and run:
   - `npm install`
   - `npm run-script bower`
 + Edit the configuration file (see the [Configuration](#configuration) section).
