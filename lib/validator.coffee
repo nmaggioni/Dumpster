@@ -26,25 +26,29 @@ exports.auth = (req, res, next) ->
     logger.warning 'Bypassing token validation.'
     next()
     return
-  token = req.query.token
-  if token in altPasswords
-      logger.info 'Valid alternative password received.'
-      next()
+  token = req.headers['dumpster-token']
+  if token
+    if token in altPasswords
+        logger.info 'Valid alternative password received.'
+        next()
+    else
+        yubikey.verify token, (isValid, status) ->
+          if isValid
+            logger.info 'Valid token received.'
+            next()
+          else
+            logger.warning 'Invalid token received! Reason: ' + status
+            res.status(401).send 'AUTH ERROR - ' + status + '\n'
   else
-      yubikey.verify token, (isValid, status) ->
-        if isValid
-          logger.info 'Valid token received.'
-          next()
-        else
-          logger.warning 'Invalid token received! Reason: ' + status
-          res.status(401).send 'AUTH ERROR - ' + status + '\n'
+    logger.warning 'Missing token or alternative password!'
+    res.status(400).send 'AUTH ERROR - Missing token\n'
 
 dateOk = undefined
 deletionDate = undefined
 
 exports.date = (req, res, next) ->
   dateOk = false
-  deletionQuery = req.query.del
+  deletionQuery = req.headers['dumpster-expiration']
   deletionDate = undefined
   deletionDay = undefined
   deletionMonth = undefined
@@ -126,7 +130,7 @@ exports.scheduleDeletion = (req, res, next) ->
   next()
 
 exports.md5 = (req, res, next) ->
-  md5query = req.query.md5
+  md5query = req.headers['dumpster-md5']
   md5uploaded = undefined
   if md5query
     if md5query.indexOf(' ') != -1

@@ -35,7 +35,8 @@ storage = multer.diskStorage(
 upload = multer(
   storage: storage
   limits:
-    fileSize: maxFileSize).single('file')
+    fileSize: maxFileSize
+).single('file')
 
 router.all '/*', (req, res, next) ->
   res.setHeader 'X-Powered-By', 'Dumpster'
@@ -46,6 +47,7 @@ if configParser.enableWebUI
     res.render 'index',
       title: 'Dumpster WebUI'
       skipAuth: skipAuth
+      maxFileSize: maxFileSize * 1024  # MB
 
 router.post '/api/upload', validator.auth, validator.date, ((req, res, next) ->
   req.socket.setTimeout 12 * 60 * 60 * 1000  # 12h

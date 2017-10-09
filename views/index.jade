@@ -1,5 +1,18 @@
 extends layout
 
+mixin expiration(col_width, col_offset)
+  //- <!--suppress HtmlUnknownAttribute -->
+  #expiration-div(class="col-md-#{col_width} col-md-offset-#{col_offset}")
+    select#expiration.selectpicker.show-tick.show-menu-arrow
+      option(value="3d", selected, disabled) Expiration (defaults to 3 days)
+      option(value="10m") 10 Minutes
+      option(value="1h") 1 Hour
+      option(value="1d") 1 Day
+      option(value="3d") 3 Days
+      option(value="7d", data-subtext="7 days") 1 Week
+      option(value="14d", data-subtext="14 days") 2 Week
+      option(value="30d", data-subtext="30 days") 1 Month
+
 block content
   header#top.header
     .header-overlay.text-vertical-center
@@ -8,61 +21,50 @@ block content
       h3 A lightweight, self-hosted and API-based file upload server supporting YubiKey OTP authentication.
       br
       .col-md-6.col-md-offset-3#alert-div
-        if !skipAuth
-          #token-div
-            input#token.form-control(type="text" placeholder="YubiKey Token / Password")
+        #parameters-div.row
+          if skipAuth
+            +expiration(4, 4)
+          else
+            #token-div.col-md-8
+              //- <!--suppress HtmlUnknownAttribute -->
+              input#token.form-control(type="text" placeholder="YubiKey Token / Password")
+            +expiration(4, 0)
         #upload-div
-          input#upload.file-loading(name='file', type='file')
-        #expiration-div.col-md-3
-          select#expiration.selectpicker.show-tick.show-menu-arrow(title="Expiration date")
-            option(value="10m") 10 Minutes
-            option(value="1h") 1 Hour
-            option(value="1d") 1 Day
-            option(value="3d") 3 Days
-            option(value="7d", data-subtext="7 days") 1 Week
-            option(value="14d", data-subtext="14 days") 2 Week
-            option(value="30d", data-subtext="30 days") 1 Month
+          form#upload.dropzone(action='#')
+            .fallback
+              input(name="file" type="file" multiple)
+            .dz-message
+              | Drop files here or click to upload.
 
-      //- http://plugins.krajee.com/file-input#ajax-uploads
       script.
         skipAuth = #{skipAuth}
         $(document).on('ready', function() {
-          $("#upload")
-            .fileinput('clear')
-            .fileinput({
-              'maxFileCount': 1,
-              'uploadUrl': window.location.origin + '/api/upload?json=1'
-            });
-          if (!skipAuth) {
-            $('#upload')
-              .fileinput('clear')
-              .fileinput('refresh', { 'dropZoneEnabled': false })
-              .fileinput('disable');
-          }
-
-          $('#upload').on('fileuploaded', function(event, data, previewId, index) {
-            var response = data.response;
-            $('#alert-div').html(createAlert(response.downloadUrl));
-          });
-
-          if (!skipAuth) {
-            $('#token').on('input', function() {
-              if($('#token').val().length > 0) {
-                $('#upload')
-                  .fileinput('clear')
-                  .fileinput('refresh', {
-                    'dropZoneEnabled': true,
-                    'uploadUrl': window.location.origin + '/api/upload?json=1&token=' + $('#token').val() + '&del=' + getExpiration()
-                    })
-                  .fileinput('enable');
+          Dropzone.options.upload = {
+            url: window.location.origin + '/api/upload?json=1',
+            paramName: "file",
+            maxFiles: 1,
+            maxFilesize: #{maxFileSize},
+            clickable: true,
+            addRemoveLinks: true,
+            accept: function(file, done) {
+              if (!skipAuth && ($('#token').val().length === 0)) {
+                done("You must first input a token or a password.");
               } else {
-                $('#upload')
-                  .fileinput('clear')
-                  .fileinput('refresh', { 'dropZoneEnabled': false })
-                  .fileinput('disable');
+                done();
               }
-            });
+            },
+            sending: function(file, xhr, formData) {
+              xhr.setRequestHeader('dumpster-token', $('#token').val());
+              xhr.setRequestHeader('dumpster-expiration', getExpiration());
+            },
+            success: function(file, response) {
+              console.log(response);
+              $('#alert-div').html(createAlert(response.downloadUrl));
+              done();
+            }
+          };
 
+          if (!skipAuth) {
             superplaceholder({
               el: document.querySelector('input[id=token]'),
               sentences: [ 'Insert your YubiKey and press its golden button' ],
@@ -77,28 +79,13 @@ block content
             });
           }
 
-          $('#expiration').on('change', function() {
-            var uploadUrl;
-            if (skipAuth) {
-              uploadUrl = window.location.origin + '/api/upload?json=1&del=' + $('#expiration').val();
-            } else {
-              uploadUrl = window.location.origin + '/api/upload?json=1&token=' + $('#token').val() + '&del=' + getExpiration();
-            }
-            $('#upload')
-              .fileinput('clear')
-              .fileinput('refresh', {
-                'uploadUrl': uploadUrl
-              });
-          });
-
           function createAlert(url) {
-            var notif = '<div class="alert alert-success alert-dismissable> <i class="fa fa-check-square"></i>' +
+            return '<div class="alert alert-success alert-dismissable">' +
+              '<i class="fa fa-check-square"></i>' +
               '<strong>Success! Here\'s your download link.</strong>' +
               '<hr class="message-inner-separator">' +
-                '<a href="' + url + '">' + escapeHTMLEntities(url) + '</a>' +
+              '<a href="' + url + '">' + escapeHTMLEntities(url) + '</a>' +
               '</div>';
-
-            return notif;
           }
 
           function escapeHTMLEntities(str) {
@@ -110,7 +97,7 @@ block content
           function getExpiration() {
             var expiration = document.getElementById('expiration');
             var selectedIndex = expiration.selectedIndex;
-            if (selectedIndex == 0) {
+            if (selectedIndex === 0) {
               return "30d";
             } else {
               return expiration.options[selectedIndex].value;
