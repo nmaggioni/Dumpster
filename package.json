@@ -15,7 +15,7 @@
     "multer": "^1.1.0",
     "node-schedule": "^1.2.5",
     "pug": "^2.0.0-rc.4",
-    "snyk": "^1.19.1",
+    "snyk": "^1.52.0",
     "winston": "^2.2.0"
   },
   "devDependencies": {},
@@ -24,7 +24,8 @@
     "start": "node server.js",
     "bower": "./node_modules/bower/bin/bower install",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "npm run snyk-protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
