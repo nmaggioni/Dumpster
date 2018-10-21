@@ -1,6 +1,6 @@
 {
   "name": "dumpster",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "Self-hosted and API-based file upload server supporting YubiKey OTP authentication.",
   "main": "server.js",
   "dependencies": {
