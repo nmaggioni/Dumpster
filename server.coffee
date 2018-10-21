@@ -87,7 +87,7 @@ app.use express.static(path.join(__dirname, 'public'))
 app.use '/', router
 
 app.listen port, ->
-  logger.info 'Starting Dumpster on port ' + port + '. (' + baseUrl.replace(uploadPath, '') + ')'
+  logger.info 'Starting Dumpster on port ' + port + '. [' + baseUrl.replace(uploadPath, '') + ']'
   if debug
     logger.warning 'Debug mode is enabled!'
   validator.checkUploadsDirectory()

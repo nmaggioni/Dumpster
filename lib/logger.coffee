@@ -1,16 +1,22 @@
 winston = require('winston')
+logger = winston.createLogger({
+  format: winston.format.simple()
+  transports: [
+    new winston.transports.Console()
+  ]
+});
 
 exports.info = (message) ->
   timestamp = (new Date).toISOString().replace(/T/, ' ').replace(new RegExp('\\..+'), '')
-  winston.log 'info', '[' + timestamp + '] %s', message
+  logger.log 'info', '[' + timestamp + '] ' + message
   return
 
 exports.warning = (message) ->
   timestamp = (new Date).toISOString().replace(/T/, ' ').replace(new RegExp('\\..+'), '')
-  winston.log 'warn', '[' + timestamp + '] %s', message
+  logger.log 'warn', '[' + timestamp + '] ' + message
   return
 
 exports.error = (message) ->
   timestamp = (new Date).toISOString().replace(/T/, ' ').replace(new RegExp('\\..+'), '')
-  winston.log 'error', '[' + timestamp + '] %s', message
+  logger.log 'error', '[' + timestamp + '] ' + message
   return
