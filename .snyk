@@ -20,3 +20,5 @@ patch:
   SNYK-JS-LODASH-450202:
     - winston > async > lodash:
         patched: '2019-07-10T05:18:43.078Z'
+    - winston > async > lodash:
+        patched: '2019-07-11T08:31:47.904Z'
