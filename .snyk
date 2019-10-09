@@ -22,3 +22,8 @@ patch:
         patched: '2019-07-10T05:18:43.078Z'
     - winston > async > lodash:
         patched: '2019-07-11T08:31:47.904Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - snyk > proxy-agent > https-proxy-agent:
+        patched: '2019-10-09T05:18:54.220Z'
+    - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-09T05:18:54.220Z'
