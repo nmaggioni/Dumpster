@@ -1,20 +1,21 @@
 FROM node:12-alpine
 
-# Create app directory
-RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+RUN chown node:node .
 
-# Install app dependencies
-COPY package.json /usr/src/app/
-COPY bower.json /usr/src/app/
-COPY .bowerrc /usr/src/app/
-RUN echo '{ "allow_root": true }' > /root/.bowerrc
-RUN npm install
-RUN npm run-script bower
+COPY package*.json bower.json .bowerrc ./
+RUN apk add --no-cache --virtual .build-tools git && \
+    apk add --no-cache tini && \
+    npm ci --only=production && \
+    echo '{ "allow_root": true }' > /root/.bowerrc && \
+    npm run bower && \
+    apk del .build-tools
 
-# Bundle app source
-COPY . /usr/src/app
+COPY . .
 
 EXPOSE 9980
 
-CMD [ "npm", "start" ]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD [ "node", "server.js" ]
+
+USER node
